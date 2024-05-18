@@ -1,0 +1,14 @@
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\bin\Debug\net8.0\ConsoleAdventure.exe
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\bin\Debug\net8.0\ConsoleAdventure.deps.json
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\bin\Debug\net8.0\ConsoleAdventure.runtimeconfig.json
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\bin\Debug\net8.0\ConsoleAdventure.dll
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\bin\Debug\net8.0\ConsoleAdventure.pdb
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.AssemblyInfoInputs.cache
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.AssemblyInfo.cs
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.csproj.CoreCompileInputs.cache
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.dll
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\refint\ConsoleAdventure.dll
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.pdb
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.genruntimeconfig.cache
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\ConsoleAdventure\obj\Debug\net8.0\ref\ConsoleAdventure.dll

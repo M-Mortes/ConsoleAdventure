@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConsoleAdventure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21f3579b3a5c96bda19ff9a8d4af342084b4f005")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a7b2563744d7d0dfb5d20d5c159305e42091f17")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConsoleAdventure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConsoleAdventure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
