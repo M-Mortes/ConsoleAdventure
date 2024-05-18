@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure\\ConsoleAdventure.csproj": {}
+    "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure\\ConsoleAdventure.csproj": {
+    "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure\\ConsoleAdventure.csproj",
+        "projectUniqueName": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure.csproj",
         "projectName": "ConsoleAdventure",
-        "projectPath": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure\\ConsoleAdventure.csproj",
+        "projectPath": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure.csproj",
         "packagesPath": "C:\\Users\\citeh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\ConsoleAdventure\\obj\\",
+        "outputPath": "C:\\Users\\citeh\\Documents\\GitHub\\ConsoleAdventure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\citeh\\AppData\\Roaming\\NuGet\\NuGet.Config",
