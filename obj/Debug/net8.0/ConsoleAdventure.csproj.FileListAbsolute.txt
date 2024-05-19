@@ -12,3 +12,4 @@ C:\Users\citeh\Documents\GitHub\ConsoleAdventure\obj\Debug\net8.0\refint\Console
 C:\Users\citeh\Documents\GitHub\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.pdb
 C:\Users\citeh\Documents\GitHub\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.genruntimeconfig.cache
 C:\Users\citeh\Documents\GitHub\ConsoleAdventure\obj\Debug\net8.0\ref\ConsoleAdventure.dll
+C:\Users\citeh\Documents\GitHub\ConsoleAdventure\obj\Debug\net8.0\ConsoleAdventure.sourcelink.json

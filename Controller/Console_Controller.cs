@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Collections;
+using System;
 
 namespace ConsoleAdventure.Controller
 {
@@ -21,7 +23,10 @@ namespace ConsoleAdventure.Controller
             int _frame_3_hight = 8;
             int _frame_3_width = 118;
 
-            var _console_controller = new Console_Controller();
+            var _cc = new Console_Controller();
+            var _rc = new Room_Controller();
+            var _ec = new Enemy_Controller();
+
             List<String> _console_frame_1 = new List<string>();
             List<String> _console_frame_2 = new List<string>();
             List<String> _console_frame_3 = new List<string>();
@@ -33,64 +38,10 @@ namespace ConsoleAdventure.Controller
             for (int i = 0; i < _frame_3_hight; i++)
                 _console_frame_3.Add(new String(' ', _frame_3_width));
 
-            List<String> man = [
-                "     ____        ",
-                "    /    \\      ",
-                "   /      |      ",
-                "   \\      |     ",
-                "    \\____/      ",
-                "     /   \\      ",
-                "    / / \\ \\    ",
-                "   / /| |\\ \\   ",
-                "  / / | | \\ \\  ",
-                " /_/  | |  \\_\\ ",
-                "      | |        ",
-                "     _|_|_       ",
-                "    / / \\ \\    ",
-                "   / /   \\ \\   ",
-                "  / /     \\ \\  ",
-                " /_/       \\_\\ "];
-
-            List<String> mage = [
-                "     ____         ",
-                "  __/    \\__     ",
-                " /__________\\    ",
-                "   /      | __    ",
-                "   \\      |/  \\ ",
-                "    \\____/ |  |  ",
-                "     /   \\ \\||/ ",
-                "    / / \\ \\ ||  ",
-                "   / /| |\\ \\||  ",
-                "  / / | | \\ ||   ",
-                " /_/  | |  \\||   ",
-                "      | |   ||    ",
-                "     _|_|_  ||    ",
-                "    / / \\ \\ ||  ",
-                "   / /   \\ \\||  ",
-                "  / /     \\ ||   ",
-                " /_/       \\||   "];
-
-            List<String> knight = [
-                "          ____          ",
-                "         /    \\        ",
-                "        /      \\       ",
-                "        \\      /       ",
-                "         \\____/        ",
-                "         [/   \\]  /\\  ",
-                "   ____ [/ / \\ \\] ||  ",
-                "  /    \\/ /| |\\ \\]|| ",
-                " /      \\/[| |]\\ \\|| ",
-                " \\      / [| |] \\ ||  ",
-                "  \\____/  [| |]  \\II  ",
-                "         [_|_|_]  II    ",
-                "         / / \\ \\      ",
-                "        / /   \\ \\     ",
-                "       / /     \\ \\    ",
-                "      /_/       \\_\\   "];
-
-            _console_frame_1 = _console_controller.Add_Char(_console_frame_1, mage);
-            _console_frame_1 = _console_controller.Add_Char(_console_frame_1, _console_controller.Reverse_Char(knight), true);
-            _console_controller.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+            _console_frame_1 = _cc.Add_Char(_console_frame_1, _cc.Frame_Combine(_ec.Mage().ToList(), _cc.Reverse_Char(_ec.Mage), _frame_1_width));
+            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+            _console_frame_1 = _cc.Add_Char(_console_frame_1, _rc.Generate_Room(true, true, true, false));
+            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
 
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
@@ -104,6 +55,8 @@ namespace ConsoleAdventure.Controller
             // Console.ReadKey();
         }
 
+        // #####################################
+        // #####################################
         void Update_Console(List<String> _console_frame_1, List<String> _console_frame_2, List<String> _console_frame_3)
         {
             string _full = new string('#', _width);
@@ -125,37 +78,53 @@ namespace ConsoleAdventure.Controller
             Console.WriteLine(_full);
         }
 
+        // #####################################
+        // #####################################
         private List<String> String_Replace(List<String> _string_list)
         {
             return _string_list.Select(x => x.Replace('X', ' ')).ToList();
         }
 
-        private List<String> Add_Char(List<String> string_list, List<String> to_add, bool right = false)
+        // #####################################
+        // #####################################
+        private List<String> Frame_Combine(IEnumerable<String> _left, IEnumerable<String> _right, int _width)
         {
-            int start;
+            List<String> _list = new List<String>();
+            List<String> _list_left = new List<String>();
+            List<String> _list_right = new List<String>();
+            int max_size = _left.Count() >= _right.Count() ? _left.Count() : _right.Count();
+            if (_left.Count() < max_size){
+                _list_left = _left.Prepend<String>(new String(' ', _left.ToList()[0].Length)).ToList();
+                _list_right = _right.ToList();
+            }
+            else if (_right.Count() < max_size){
+                _list_right = _right.Prepend<String>(new String(' ', _right.ToList()[0].Length)).ToList();
+                _list_left = _left.ToList();
+            }
+            for (int i = 0; i < max_size; i++)
+            {
+                _list.Add(_list_left[i] + new String(' ', _width - 10 - (_list_left[i].Length + _list_right[i].Length)) + _list_right[i]);
+            }
+            return _list;
+        }
 
+        // #####################################
+        // #####################################
+        // Adds the Ascii List to the show list
+        // #####################################
+        // #####################################
+        private List<String> Add_Char(List<String> string_list, List<String> to_add)
+        {
             int index = 0;
             int index_count = 0;
             int top = (string_list.Count() - to_add.Count()) / 2;
             int bot = string_list.Count() - to_add.Count() - top;
+            int start = (string_list[0].Length / 2 - to_add[0].Length / 2);
             List<String> new_string_list = new List<string>();
             foreach (String str in string_list)
             {
                 if (index >= top && index < string_list.Count() - bot)
                 {
-                    if (right)
-                    {
-                        start = str.Length - 2 - to_add[index_count].Length;
-                        /*
-                        start = str.Length - to_add[index_count].Length;
-                        if (to_add[index_count].Contains('\\'))
-                        {
-                            start -= 1 * to_add[index_count].Count(x => x == '\\');
-                        }
-                        */
-                    }
-                    else
-                        start = 2;
                     var string_builder = new StringBuilder(str);
                     string_builder.Remove(start, to_add[index_count].Length);
                     string_builder.Insert(start, to_add[index_count]);
@@ -170,16 +139,22 @@ namespace ConsoleAdventure.Controller
             }
             return new_string_list;
         }
-        public List<String> Reverse_Char(List<String> man)
+
+        // ############################
+        // ############################
+        // Mirror the given ascii List
+        // ############################
+        // ############################
+        public IEnumerable<String> Reverse_Char(List<String> figure)
         {
-            List<String> new_string = new List<String>();
-            foreach (String str in man)
+            IEnumerable<String> new_string = new List<String>();
+            foreach (String str in figure)
             {
                 String s = str.Replace('\\', 'x').Replace('/', '\\').Replace('x', '/');
                 s = s.Replace('[', 'x').Replace(']', '[').Replace('x', ']');
                 char[] charArray = s.ToCharArray();
                 Array.Reverse(charArray);
-                new_string.Add(new string(charArray));
+                new_string.Append(new string(charArray));
             }
             return new_string;
         }
