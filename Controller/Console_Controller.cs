@@ -11,21 +11,56 @@ namespace ConsoleAdventure.Controller
     {
         int _hight = 29;
         int _width = 120;
-
-        int _septerator_space = 80;
+        private static int _frame_1_width = 78;
+        private static int _frame_1_hight = 18;
+        private static int _frame_2_hight = 18;
+        private static int _frame_2_width = 39;
+        private static int _frame_3_hight = 8;
+        private static int _frame_3_width = 118;
+        private static int action_ident;
 
         static void Main(string[] args)
         {
-            int _frame_1_hight = 18;
-            int _frame_1_width = 78;
-            int _frame_2_hight = 18;
-            int _frame_2_width = 39;
-            int _frame_3_hight = 8;
-            int _frame_3_width = 118;
 
             var _cc = new Console_Controller();
             var _rc = new Room_Controller();
             var _ec = new Enemy_Controller();
+            var _ccf = _cc.Clear_Console_Frame();
+
+            List<String> _console_frame_1 = _ccf._console_frame_1;
+            List<String> _console_frame_2 = _ccf._console_frame_2;
+            List<String> _console_frame_3 = _ccf._console_frame_3;
+
+            List<String> mage = _ec.Mage();
+            Random random = new Random();
+
+            _console_frame_1 = _cc.Add_To_Frame(_console_frame_1, _cc.Frame_Combine(mage, _cc.Reverse_Char(mage), _frame_1_width));
+            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+            Console.Title = "Fixed Size Console";
+            Console.Write("Nächste aktion?: ");
+            action_ident = Console.Read();
+
+            _console_frame_1 = _ccf._console_frame_1;
+            _console_frame_2 = _ccf._console_frame_2;
+            _console_frame_3 = _ccf._console_frame_3;
+
+
+            _console_frame_1 = _cc.Add_To_Frame(_console_frame_1, _rc.Generate_Room(random.Next(2) == 1, random.Next(2) == 1, random.Next(2) == 1, random.Next(2) == 1));
+            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+
+            Console.InputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = Encoding.UTF8;
+
+            // Console.CursorVisible = false;
+            // string name = Console.ReadLine();
+            // Console.WriteLine($"Hallo, {name}! Schön, Sie kennenzulernen.");
+            // Console.WriteLine("Drücken Sie eine beliebige Taste, um das Programm zu beenden...");
+        }
+
+        // #####################################
+        // #####################################
+        (List<String> _console_frame_1, List<String> _console_frame_2, List<String> _console_frame_3) Clear_Console_Frame()
+        {
 
             List<String> _console_frame_1 = new List<string>();
             List<String> _console_frame_2 = new List<string>();
@@ -37,22 +72,7 @@ namespace ConsoleAdventure.Controller
                 _console_frame_2.Add(new String(' ', _frame_2_width));
             for (int i = 0; i < _frame_3_hight; i++)
                 _console_frame_3.Add(new String(' ', _frame_3_width));
-
-            _console_frame_1 = _cc.Add_Char(_console_frame_1, _cc.Frame_Combine(_ec.Mage().ToList(), _cc.Reverse_Char(_ec.Mage), _frame_1_width));
-            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
-            _console_frame_1 = _cc.Add_Char(_console_frame_1, _rc.Generate_Room(true, true, true, false));
-            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
-
-            Console.InputEncoding = Encoding.UTF8;
-            Console.OutputEncoding = Encoding.UTF8;
-
-            // Console.CursorVisible = false;
-            // Console.Title = "Fixed Size Console";
-            // Console.Write("Bitte geben Sie Ihren Namen ein: ");
-            // string name = Console.ReadLine();
-            // Console.WriteLine($"Hallo, {name}! Schön, Sie kennenzulernen.");
-            // Console.WriteLine("Drücken Sie eine beliebige Taste, um das Programm zu beenden...");
-            // Console.ReadKey();
+            return (_console_frame_1, _console_frame_2, _console_frame_3);
         }
 
         // #####################################
@@ -80,26 +100,52 @@ namespace ConsoleAdventure.Controller
 
         // #####################################
         // #####################################
-        private List<String> String_Replace(List<String> _string_list)
+        private List<String> String_Replace(List<String> _string_list, List<String>? text = null)
         {
+            if (text != null)
+            {
+                int index = 0;
+                foreach (String str in _string_list)
+                {
+                    int i = 0;
+                    char[] chars = str.ToCharArray();
+                    char[] new_chars = [];
+                    foreach (char _char in chars)
+                    {
+                        if (_char == 'X' && text[index].Length > i)
+                            new_chars.Append(text[index][i]);
+                        else
+                            new_chars.Append(_char);
+                        i++;
+                    };
+                    index++;
+                }
+            }
             return _string_list.Select(x => x.Replace('X', ' ')).ToList();
         }
 
         // #####################################
         // #####################################
-        private List<String> Frame_Combine(IEnumerable<String> _left, IEnumerable<String> _right, int _width)
+        private List<String> Frame_Combine(List<String> _left, List<String> _right, int _width)
         {
             List<String> _list = new List<String>();
             List<String> _list_left = new List<String>();
             List<String> _list_right = new List<String>();
             int max_size = _left.Count() >= _right.Count() ? _left.Count() : _right.Count();
-            if (_left.Count() < max_size){
-                _list_left = _left.Prepend<String>(new String(' ', _left.ToList()[0].Length)).ToList();
-                _list_right = _right.ToList();
+            if (_left.Count() < max_size)
+            {
+                _list_left = _left.Prepend<String>(new String(' ', _left[0].Length)).ToList();
+                _list_right = _right;
             }
-            else if (_right.Count() < max_size){
-                _list_right = _right.Prepend<String>(new String(' ', _right.ToList()[0].Length)).ToList();
-                _list_left = _left.ToList();
+            else if (_right.Count() < max_size)
+            {
+                _list_right = _right.Prepend<String>(new String(' ', _right[0].Length)).ToList();
+                _list_left = _left;
+            }
+            else
+            {
+                _list_right = _right;
+                _list_left = _left;
             }
             for (int i = 0; i < max_size; i++)
             {
@@ -113,7 +159,7 @@ namespace ConsoleAdventure.Controller
         // Adds the Ascii List to the show list
         // #####################################
         // #####################################
-        private List<String> Add_Char(List<String> string_list, List<String> to_add)
+        private List<String> Add_To_Frame(List<String> string_list, List<String> to_add)
         {
             int index = 0;
             int index_count = 0;
@@ -145,16 +191,16 @@ namespace ConsoleAdventure.Controller
         // Mirror the given ascii List
         // ############################
         // ############################
-        public IEnumerable<String> Reverse_Char(List<String> figure)
+        public List<String> Reverse_Char(IEnumerable<String> figure)
         {
-            IEnumerable<String> new_string = new List<String>();
+            List<String> new_string = new List<String>();
             foreach (String str in figure)
             {
                 String s = str.Replace('\\', 'x').Replace('/', '\\').Replace('x', '/');
                 s = s.Replace('[', 'x').Replace(']', '[').Replace('x', ']');
                 char[] charArray = s.ToCharArray();
                 Array.Reverse(charArray);
-                new_string.Append(new string(charArray));
+                new_string.Add(new String(charArray));
             }
             return new_string;
         }

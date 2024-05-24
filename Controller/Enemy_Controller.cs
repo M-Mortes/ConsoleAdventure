@@ -26,9 +26,9 @@ namespace ConsoleAdventure.Controller
      */
     internal class Enemy_Controller
     {
-        public static IEnumerable<String> Man()
+        public List<String> Man()
         {
-            IEnumerable<String> man = [
+            List<String> man = [
                 "    ____       ",
                 "   /    \\     ",
                 "  /      |     ",
@@ -48,9 +48,9 @@ namespace ConsoleAdventure.Controller
             return man;
         }
 
-        public static IEnumerable<String> Mage()
+        public List<String> Mage()
         {
-            IEnumerable<String> mage = new List<string> {
+            List<String> mage = [
                 "    ____        ",
                 " __/    \\__    ",
                 "/__________\\   ",
@@ -67,13 +67,13 @@ namespace ConsoleAdventure.Controller
                 "   / / \\ \\ || ",
                 "  / /   \\ \\|| ",
                 " / /     \\ ||  ",
-                "/_/       \\||  " };
+                "/_/       \\||  " ];
             return mage;
         }
 
-        public static IEnumerable<String> Knight()
+        public List<String> Knight()
         {
-            IEnumerable<String> knight = [
+            List<String> knight = [
                 "         ____         ",
                 "        /    \\       ",
                 "       /      \\      ",
