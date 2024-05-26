@@ -69,9 +69,17 @@ namespace ConsoleAdventure.Controller
             for (int i = 0; i < _frame_1_hight; i++)
                 _console_frame_1.Add(new String(' ', _frame_1_width));
             for (int i = 0; i < _frame_2_hight; i++)
-                _console_frame_2.Add(new String(' ', _frame_2_width));
+            {
+                if (i == 0 || i == _frame_2_hight - 1)
+                    _console_frame_2.Add(new String(' ', _frame_2_width));
+                else
+                    _console_frame_2.Add(new String(' ', 1) + new String('X', _frame_2_width - 2) + new String(' ', 1));
+            }
             for (int i = 0; i < _frame_3_hight; i++)
-                _console_frame_3.Add(new String(' ', _frame_3_width));
+                if (i == 0 || i == _frame_3_hight - 1)
+                    _console_frame_3.Add(new String(' ', _frame_3_width));
+                else
+                    _console_frame_3.Add(new String(' ', 1) + new String('X', _frame_3_width - 2) + new String(' ', 1));
             return (_console_frame_1, _console_frame_2, _console_frame_3);
         }
 
@@ -104,22 +112,37 @@ namespace ConsoleAdventure.Controller
         {
             if (text != null)
             {
+                List<String> result = new List<String>();
                 int index = 0;
                 foreach (String str in _string_list)
                 {
+                    if (!str.Contains('X'))
+                    {
+                        result.Add(str);
+                        continue;
+                    }
+                    if (index >= text.Count)
+                    {
+                        result.Add(str.Replace('X', ' '));
+                        continue;
+                    }
                     int i = 0;
                     char[] chars = str.ToCharArray();
-                    char[] new_chars = [];
+                    string new_chars = "";
                     foreach (char _char in chars)
                     {
                         if (_char == 'X' && text[index].Length > i)
-                            new_chars.Append(text[index][i]);
+                        {
+                            new_chars += text[index][i];
+                            i++;
+                        }
                         else
-                            new_chars.Append(_char);
-                        i++;
+                            new_chars += _char == 'X' ? ' ' : _char;
                     };
                     index++;
+                    result.Add(new_chars);
                 }
+                return result;
             }
             return _string_list.Select(x => x.Replace('X', ' ')).ToList();
         }
