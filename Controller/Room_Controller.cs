@@ -38,9 +38,9 @@ namespace ConsoleAdventure.Controller
 {
     internal class Room_Controller
     {
-        private List<String> Path_North(bool block = false)
+        private static List<string> Path_North(bool block = false)
         {
-            List<String> room = new List<String>();
+            List<string> room;
             if (!block)
                 room = [
                     "╔╝   ╚╗"];
@@ -50,9 +50,9 @@ namespace ConsoleAdventure.Controller
             return room;
         }
 
-        private List<String> Path_South(bool block = false)
+        private static List<string> Path_South(bool block = false)
         {
-            List<String> room = new List<String>();
+            List<string> room;
             if (!block)
                 room = [
                     "╚╗   ╔╝"];
@@ -62,9 +62,9 @@ namespace ConsoleAdventure.Controller
             return room;
         }
 
-        private List<String> Path_West(bool block = false)
+        private static List<string> Path_West(bool block = false)
         {
-            List<String> room = new List<String>();
+            List<string> room;
             if (!block)
                 room = [
                     " ",
@@ -80,9 +80,9 @@ namespace ConsoleAdventure.Controller
             return room;
         }
         
-        private List<String> Path_East(bool block = false)
+        private static List<string> Path_East(bool block = false)
         {
-            List<String> room = new List<String>();
+            List<string> room;
             if (!block)
                 room = [
                     " ",
@@ -98,16 +98,16 @@ namespace ConsoleAdventure.Controller
             return room;
         }
 
-        public List<String> Generate_Room(bool north = false, bool east = false, bool south = false, bool west = false)
+        public List<string> Generate_Room(bool north = false, bool east = false, bool south = false, bool west = false)
         {
-            List<String> room = new List<String>();
-            List<String> _north = Path_North(north);
-            List<String> _east = Path_East(east);
-            List<String> _south = Path_South(south);
-            List<String> _west = Path_West(west);
+            List<string> room = [];
+            List<string> _north = Path_North(north);
+            List<string> _east = Path_East(east);
+            List<string> _south = Path_South(south);
+            List<string> _west = Path_West(west);
             room.Add(_north[0]);
-            room.Add(_west[1] + new String(' ', _north[0].Length - 2) + _east[1]);
-            room.Add(_west[2] + new String(' ', _north[0].Length - 2) + _east[2]);
+            room.Add(_west[1] + new string(' ', _north[0].Length - 2) + _east[1]);
+            room.Add(_west[2] + new string(' ', _north[0].Length - 2) + _east[2]);
             room.Add(_south[0]);
             return room;
         }
