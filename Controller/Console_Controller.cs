@@ -1,55 +1,35 @@
-﻿using System.Text;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Collections;
+﻿using ConsoleAdventure.Entitys;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace ConsoleAdventure.Controller
 {
-    class Console_Controller
+    internal class Console_Controller
     {
-        int _hight = 29;
-        int _width = 120;
+        private int _hight = 29;
+        private int _width = 120;
         private static int _frame_1_width = 78;
         private static int _frame_1_hight = 18;
         private static int _frame_2_hight = 18;
         private static int _frame_2_width = 39;
         private static int _frame_3_hight = 8;
         private static int _frame_3_width = 118;
-        private static int action_ident;
 
-        static void Main(string[] args)
+        private Room_Controller room_controller = new Room_Controller();
+
+        public Console_Controller()
         {
-
-            var _cc = new Console_Controller();
-            var _rc = new Room_Controller();
-            var _ec = new Enemy_Controller();
-            var _ccf = _cc.Clear_Console_Frame();
-
-            List<string> _console_frame_1 = _ccf._console_frame_1;
-            List<string> _console_frame_2 = _ccf._console_frame_2;
-            List<string> _console_frame_3 = _ccf._console_frame_3;
-
-            List<string> mage = _ec.Mage();
-            Random random = new();
-
-            _console_frame_1 = _cc.Add_To_Frame(_console_frame_1, _cc.Frame_Combine(mage, _cc.Reverse_Char(mage), _frame_1_width));
-            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
-            Console.Title = "Fixed Size Console";
-            Console.Write("Nächste aktion?: ");
-            action_ident = Console.Read();
-
-            _console_frame_1 = _ccf._console_frame_1;
-            _console_frame_2 = _ccf._console_frame_2;
-            _console_frame_3 = _ccf._console_frame_3;
-
-
-            _console_frame_1 = _cc.Add_To_Frame(_console_frame_1, _rc.Generate_Room(random.Next(2) == 1, random.Next(2) == 1, random.Next(2) == 1, random.Next(2) == 1));
-            _cc.Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
 
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
+            Console.Title = "Console Adventure";
+
 
             // Console.CursorVisible = false;
             // string name = Console.ReadLine();
@@ -57,11 +37,52 @@ namespace ConsoleAdventure.Controller
             // Console.WriteLine("Drücken Sie eine beliebige Taste, um das Programm zu beenden...");
         }
 
+        public void generate_Enemy_View()
+        {
+            Enemy enemy = new Enemy();
+            var _ccf = Clear_Console_Frame();
+
+            List<string> _console_frame_1 = _ccf._console_frame_1;
+            List<string> _console_frame_2 = _ccf._console_frame_2;
+            List<string> _console_frame_3 = _ccf._console_frame_3;
+            _console_frame_1 = Add_To_Frame(_console_frame_1, Frame_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
+            _console_frame_2 = String_Replace(_console_frame_2, enemy.get_stats());
+            Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+        }
+
+        private void generate_Room_View()
+        {
+            var _ccf = Clear_Console_Frame();
+            room_controller.new_Room();
+
+            List<string> _console_frame_1 = _ccf._console_frame_1;
+            List<string> _console_frame_2 = _ccf._console_frame_2;
+            List<string> _console_frame_3 = _ccf._console_frame_3;
+
+            _console_frame_1 = Add_To_Frame(_console_frame_1, room_controller.get_Current_Room());
+            Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+        }
+
+        public void generate_View()
+        {
+            Random random = new Random();
+            if (random.Next(2) == 1)
+            {
+                generate_Enemy_View();
+            }
+            else
+            {
+                generate_Room_View();
+            }
+        }
+
+        // #####################################
+        // #####################################
+        // Emptys the view
         // #####################################
         // #####################################
         private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) Clear_Console_Frame()
         {
-
             List<string> _console_frame_1 = new();
             List<string> _console_frame_2 = new();
             List<string> _console_frame_3 = new();
@@ -85,6 +106,9 @@ namespace ConsoleAdventure.Controller
 
         // #####################################
         // #####################################
+        // writes the view with spacers
+        // #####################################
+        // #####################################
         private void Update_Console(List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3)
         {
             string _full = new('#', _width);
@@ -106,6 +130,9 @@ namespace ConsoleAdventure.Controller
             Console.WriteLine(_full);
         }
 
+        // #####################################
+        // #####################################
+        // replacing the stringplaceholders
         // #####################################
         // #####################################
         private List<string> String_Replace(List<string> _string_list, List<string>? text = null)
@@ -147,6 +174,9 @@ namespace ConsoleAdventure.Controller
             return _string_list.Select(x => x.Replace('X', ' ')).ToList();
         }
 
+        // #####################################
+        // #####################################
+        // combines 2 string lists, centers them
         // #####################################
         // #####################################
         private List<string> Frame_Combine(List<string> _left, List<string> _right, int _width)
@@ -228,4 +258,5 @@ namespace ConsoleAdventure.Controller
             return new_string;
         }
     }
+
 }

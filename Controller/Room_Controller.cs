@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 /*
     * alt  26 → →
-    * alt  28 → ∟
-    * alt  29 → ↔
     * alt 176 → ░
     * alt 177 → ▒
     * alt 178 → ▓
@@ -29,7 +27,6 @@ using System.Threading.Tasks;
     * alt 195 → ├
     * alt 196 → ─
     * alt 197 → ┼
-    * alt 207 → ¤
     * alt 217 → ┘
     * alt 218 → ┌
     */
@@ -38,79 +35,20 @@ namespace ConsoleAdventure.Controller
 {
     internal class Room_Controller
     {
-        private static List<string> Path_North(bool block = false)
+        private int _room_counter = -1;
+        private List<Room> _rooms = new List<Room>();
+        private Room room;
+
+        public List<string> get_Current_Room()
         {
-            List<string> room;
-            if (!block)
-                room = [
-                    "╔╝   ╚╗"];
-            else
-                room = [
-                    "╔═════╗"];
-            return room;
+            return room.get_Room_Ascii();
         }
 
-        private static List<string> Path_South(bool block = false)
+        public void new_Room()
         {
-            List<string> room;
-            if (!block)
-                room = [
-                    "╚╗   ╔╝"];
-            else
-                room = [
-                    "╚═════╝"];
-            return room;
+            _room_counter++;
+            room = new Room(_room_counter);
+            _rooms.Add(room);
         }
-
-        private static List<string> Path_West(bool block = false)
-        {
-            List<string> room;
-            if (!block)
-                room = [
-                    " ",
-                    "╝",
-                    "╗",
-                    " "];
-            else
-                room = [
-                    " ",
-                    "║",
-                    "║",
-                    " "];
-            return room;
-        }
-        
-        private static List<string> Path_East(bool block = false)
-        {
-            List<string> room;
-            if (!block)
-                room = [
-                    " ",
-                    "╚",
-                    "╔",
-                    " "];
-            else
-                room = [
-                    " ",
-                    "║",
-                    "║",
-                    " "];
-            return room;
-        }
-
-        public List<string> Generate_Room(bool north = false, bool east = false, bool south = false, bool west = false)
-        {
-            List<string> room = [];
-            List<string> _north = Path_North(north);
-            List<string> _east = Path_East(east);
-            List<string> _south = Path_South(south);
-            List<string> _west = Path_West(west);
-            room.Add(_north[0]);
-            room.Add(_west[1] + new string(' ', _north[0].Length - 2) + _east[1]);
-            room.Add(_west[2] + new string(' ', _north[0].Length - 2) + _east[2]);
-            room.Add(_south[0]);
-            return room;
-        }
-
     }
 }
