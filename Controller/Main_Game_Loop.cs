@@ -17,8 +17,17 @@ namespace ConsoleAdventure.Controller
 
         static void Main(string[] args)
         {
-            _cc.generate_View();
-            _ac.next_Action();
+            Global_Values.action_Ident = -1;
+            Global_Values.gamestate = 1;
+#if DEBUG
+            // _cc.generate_View();
+            _cc.generate_Room_View();
+#endif
+            while (Global_Values.action_Ident == -1)
+            {
+                _ac.next_Action();
+                _ac.next_Reaction();
+            }
         }
 
     }

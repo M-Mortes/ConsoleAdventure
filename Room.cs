@@ -77,6 +77,36 @@ namespace ConsoleAdventure
             west_b = !origin_west && (_west_block || random.Next(2) == 1);
             east_b = !origin_east && (_east_block || random.Next(2) == 1);
             _room_Ascii = Generate_Room(north_b, east_b, south_b, west_b);
+
+            //    0 → deadend
+            //    1 → 1-way west
+            //   10 → 1-way north
+            //  100 → 1-way east
+            // 1000 → 1-way south
+            int ident = 0;
+            if (west_b)
+            {
+                ident += 1;
+            }
+            if (north_b)
+            {
+                ident += 10;
+            }
+            if (east_b)
+            {
+                ident += 100;
+            }
+            if (south_b)
+            {
+                ident += 1000;
+            }
+            Global_Values.room_Ident = ident;
+
+            if (north_b && south_b && west_b && east_b && _origin.Equals(""))
+            {
+                Room_Construct();
+            }
+
         }
 
         public List<string> Generate_Room(bool north_b = false, bool east_b = false, bool south_b = false, bool west_b = false)

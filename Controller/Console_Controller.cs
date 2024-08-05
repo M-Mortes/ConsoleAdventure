@@ -14,8 +14,8 @@ namespace ConsoleAdventure.Controller
     {
         private int _hight = 29;
         private int _width = 120;
-        private static int _frame_1_width = 78;
         private static int _frame_1_hight = 18;
+        private static int _frame_1_width = 78;
         private static int _frame_2_hight = 18;
         private static int _frame_2_width = 39;
         private static int _frame_3_hight = 8;
@@ -32,9 +32,6 @@ namespace ConsoleAdventure.Controller
 
 
             // Console.CursorVisible = false;
-            // string name = Console.ReadLine();
-            // Console.WriteLine($"Hallo, {name}! Schön, Sie kennenzulernen.");
-            // Console.WriteLine("Drücken Sie eine beliebige Taste, um das Programm zu beenden...");
         }
 
         public void generate_Enemy_View()
@@ -45,12 +42,12 @@ namespace ConsoleAdventure.Controller
             List<string> _console_frame_1 = _ccf._console_frame_1;
             List<string> _console_frame_2 = _ccf._console_frame_2;
             List<string> _console_frame_3 = _ccf._console_frame_3;
-            _console_frame_1 = Add_To_Frame(_console_frame_1, Frame_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
+            _console_frame_1 = Add_To_Frame(_console_frame_1, String_List_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
             _console_frame_2 = String_Replace(_console_frame_2, enemy.get_stats());
             Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
         }
 
-        private void generate_Room_View()
+        public void generate_Room_View()
         {
             var _ccf = Clear_Console_Frame();
             room_controller.new_Room();
@@ -79,8 +76,6 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // Emptys the view
-        // #####################################
-        // #####################################
         private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) Clear_Console_Frame()
         {
             List<string> _console_frame_1 = new();
@@ -107,11 +102,32 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // writes the view with spacers
-        // #####################################
-        // #####################################
         private void Update_Console(List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3)
         {
             string _full = new('#', _width);
+
+            List<string> temp = [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20"
+                ];
 
             _console_frame_1 = String_Replace(_console_frame_1);
             _console_frame_2 = String_Replace(_console_frame_2);
@@ -133,12 +149,24 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // replacing the stringplaceholders
-        // #####################################
-        // #####################################
         private List<string> String_Replace(List<string> _string_list, List<string>? text = null)
         {
             if (text != null)
             {
+                int lines = _string_list.Count - 2;
+                if (text.Count > lines)
+                {
+                    List<string> list = text;
+                    text = new();
+                    int max = ((int)Math.Ceiling((double)list.Count / lines)) * lines;
+                    text = list.GetRange(0, lines);
+                    for(int i = list.Count; i <= max; i++)
+                        list.Add("");
+                    for (int i = lines; i < max; i += lines)
+                    {
+                        text = String_List_Combine(text, list.GetRange(i, lines));
+                    }
+                }
                 List<string> result = new List<string>();
                 int index = 0;
                 foreach (string str in _string_list)
@@ -177,32 +205,46 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // combines 2 string lists, centers them
-        // #####################################
-        // #####################################
-        private List<string> Frame_Combine(List<string> _left, List<string> _right, int _width)
+        private List<string> String_List_Combine(List<string> _left, List<string> _right, int _width = 0)
         {
             List<string> _list = new List<string>();
             List<string> _list_left = new List<string>();
             List<string> _list_right = new List<string>();
-            int max_size = _left.Count() >= _right.Count() ? _left.Count() : _right.Count();
-            if (_left.Count() < max_size)
+            int max_size = _left.Count >= _right.Count ? _left.Count : _right.Count;
+            if (_left.Count < max_size)
             {
-                _list_left = _left.Prepend<string>(new string(' ', _left[0].Length)).ToList();
-                _list_right = _right;
+                for (int i = _left.Count; i <= max_size; i++)
+                    _left.Append<string>(new string(' ', _left[0].Length)).ToList();
             }
-            else if (_right.Count() < max_size)
+            else if (_right.Count < max_size)
             {
-                _list_right = _right.Prepend<string>(new string(' ', _right[0].Length)).ToList();
-                _list_left = _left;
+                for (int i = _right.Count; i <= max_size; i++)
+                    _right.Append<string>(new string(' ', _right[0].Length)).ToList();
+            }
+            _list_right = _right;
+            _list_left = _left;
+
+            if (_width == 0)
+            {
+                int max_left = 0;
+                foreach (string str in _left)
+                {
+                    if (str.Length > max_left)
+                    {
+                        max_left = str.Length;
+                    }
+                }
+                for (int i = 0; i < max_size; i++)
+                {
+                    _list.Add(_left[i] + new string(' ', 1 + max_left - _left[i].Length) + _right[i]);
+                }
             }
             else
             {
-                _list_right = _right;
-                _list_left = _left;
-            }
-            for (int i = 0; i < max_size; i++)
-            {
-                _list.Add(_list_left[i] + new string(' ', _width - 10 - (_list_left[i].Length + _list_right[i].Length)) + _list_right[i]);
+                for (int i = 0; i < max_size; i++)
+                {
+                    _list.Add(_list_left[i] + new string(' ', _width - 10 - (_list_left[i].Length + _list_right[i].Length)) + _list_right[i]);
+                }
             }
             return _list;
         }
@@ -210,8 +252,6 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // Adds the Ascii List to the show list
-        // #####################################
-        // #####################################
         private List<string> Add_To_Frame(List<string> string_list, List<string> to_add)
         {
             int index = 0;
@@ -242,8 +282,6 @@ namespace ConsoleAdventure.Controller
         // ############################
         // ############################
         // Mirror the given ascii List
-        // ############################
-        // ############################
         private List<string> Reverse_Char(IEnumerable<string> figure)
         {
             List<string> new_string = new List<string>();
