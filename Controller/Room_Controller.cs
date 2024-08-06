@@ -38,7 +38,6 @@ namespace ConsoleAdventure.Controller
     internal class Room_Controller
     {
         private int _room_id = 0;
-        private int _room_count = 0;
         private List<Room> _rooms = new List<Room>();
         private Room room;
         private int door_count = 0;
@@ -53,8 +52,8 @@ namespace ConsoleAdventure.Controller
         public void generate_Map(int level)
         {
             _room_id = 1;
-            _room_count = 6 + rand.Next(0, level);
-            rooms(new Room(_room_id, max_new: _room_count));
+            Global_Values.room_count = 6 + rand.Next(0, level);
+            rooms(new Room(_room_id, max_new: Global_Values.room_count));
 
             File_Controller _cf = new File_Controller();
             _cf.write_Map(_rooms, $"{level}");
@@ -92,9 +91,9 @@ namespace ConsoleAdventure.Controller
                 ident -= 1000;
                 x = room.x;
                 y = room.y - 1;
-                if (door_count + _room_id <= _room_count)
+                if (door_count + _room_id <= Global_Values.room_count)
                     (block_north, block_west, block_south, block_east) = get_blocked(1000, x, y);
-                rooms(new Room(_room_id, north_path: true, y: room.y - 1, x: room.x, max_new: _room_count - (door_count + room.id),
+                rooms(new Room(_room_id, north_path: true, y: room.y - 1, x: room.x, max_new: Global_Values.room_count - (door_count + _room_id - 1),
                     north_block: block_north, south_block: block_south, east_block: block_east, west_block: block_west));
             }
             if (ident >= 100)
@@ -102,9 +101,9 @@ namespace ConsoleAdventure.Controller
                 ident -= 100;
                 x = room.x + 1;
                 y = room.y;
-                if (door_count + _room_id <= _room_count)
+                if (door_count + _room_id <= Global_Values.room_count)
                     (block_north, block_west, block_south, block_east) = get_blocked(100, x, y);
-                rooms(new Room(_room_id, west_path: true, x: room.x + 1, y: room.y, max_new: _room_count - (door_count + room.id),
+                rooms(new Room(_room_id, west_path: true, x: room.x + 1, y: room.y, max_new: Global_Values.room_count - (door_count + _room_id - 1),
                     north_block: block_north, south_block: block_south, east_block: block_east, west_block: block_west));
             }
             if (ident >= 10)
@@ -112,9 +111,9 @@ namespace ConsoleAdventure.Controller
                 ident -= 10;
                 x = room.x;
                 y = room.y + 1;
-                if (door_count + _room_id <= _room_count)
+                if (door_count + _room_id <= Global_Values.room_count)
                     (block_north, block_west, block_south, block_east) = get_blocked(10, x, y);
-                rooms(new Room(_room_id, south_path: true, y: room.y + 1, x: room.x, max_new: _room_count - (door_count + room.id),
+                rooms(new Room(_room_id, south_path: true, y: room.y + 1, x: room.x, max_new: Global_Values.room_count - (door_count + _room_id - 1),
                     north_block: block_north, south_block: block_south, east_block: block_east, west_block: block_west));
             }
             if (ident >= 1)
@@ -122,9 +121,9 @@ namespace ConsoleAdventure.Controller
                 ident -= 1;
                 x = room.x - 1;
                 y = room.y;
-                if (door_count + _room_id <= _room_count)
+                if (door_count + _room_id <= Global_Values.room_count)
                     (block_north, block_west, block_south, block_east) = get_blocked(10, x, y);
-                rooms(new Room(_room_id, east_path: true, x: room.x - 1, y: room.y, max_new: _room_count - (door_count + room.id),
+                rooms(new Room(_room_id, east_path: true, x: room.x - 1, y: room.y, max_new: Global_Values.room_count - (door_count + _room_id - 1),
                     north_block: block_north, south_block: block_south, east_block: block_east, west_block: block_west));
             }
         }

@@ -76,17 +76,15 @@ namespace ConsoleAdventure
                     block = [true, true, false];
                 if (new_doors == 0)
                     block = [true, true, true];
-                int n = block.Count;
-                while (n > 1)
-                {
-                    n--;
-                    int k = random.Next(n + 1);
-                    bool value = block[k];
-                    block[k] = block[n];
-                    block[n] = value;
-                }
+                block.Shuffle();
             }
-            int block_chance = new_doors >= 4 ? 5 : 40;
+            int block_chance = 0;
+            if (new_doors < Global_Values.room_count * 1 / 3)
+                block_chance = 45;
+            else if (new_doors <= Global_Values.room_count * 2 / 3)
+                block_chance = 20;
+            // int block_chance = new_doors >= 4 ? 35 : 60;
+            // int block_chance = new_doors >= 4 ? 45 : 10;
             bool _north_block;
             bool _south_block;
             bool _west_block;
@@ -118,6 +116,15 @@ namespace ConsoleAdventure
                 _south_block = this._south_block || random.Next(100) <= block_chance || block[1];
                 _west_block = this._west_block || random.Next(100) <= block_chance || block[2];
                 _east_block = false;
+            }
+            if (id == 1)
+            {
+                List<bool> list = new List<bool>() { false, true, false, false };
+                list.Shuffle();
+                _north_block = list[0];
+                _east_block = list[1];
+                _south_block = list[2];
+                _west_block = list[3];
             }
             _room_Ascii = Generate_Room(_north_block, _east_block, _south_block, _west_block);
 
