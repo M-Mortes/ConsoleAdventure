@@ -50,7 +50,7 @@ namespace ConsoleAdventure.Controller
         public void generate_Room_View()
         {
             var _ccf = Clear_Console_Frame();
-            room_controller.new_Room();
+            room_controller.generate_Map(1);
 
             List<string> _console_frame_1 = _ccf._console_frame_1;
             List<string> _console_frame_2 = _ccf._console_frame_2;
@@ -62,7 +62,7 @@ namespace ConsoleAdventure.Controller
 
         public void generate_View()
         {
-            Random random = new Random();
+            Random random = new(Global_Values.Seed);
             if (random.Next(2) == 1)
             {
                 generate_Enemy_View();

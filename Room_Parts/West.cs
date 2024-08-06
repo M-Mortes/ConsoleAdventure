@@ -13,16 +13,18 @@ namespace ConsoleAdventure.Room_Parts
             List<string> room;
             if (!block)
                 room = [
-                    " ",
+                    "║",
                     "╝",
                     "╗",
-                    " "];
+                    "║"
+                    ];
             else
                 room = [
-                    " ",
                     "║",
                     "║",
-                    " "];
+                    "║",
+                    "║"
+                    ];
             return room;
         }
     }

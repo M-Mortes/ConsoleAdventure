@@ -33,6 +33,8 @@ namespace ConsoleAdventure
         // 1110 → 3-way north-south-east
         // 1111 → 4-way north-south-east-west
         public static int room_Ident { get; set; }
+
+        public static int Seed { get; set; }
         
     }
 }

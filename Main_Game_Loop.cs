@@ -5,8 +5,9 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System;
 using ConsoleAdventure.Entitys;
+using ConsoleAdventure.Controller;
 
-namespace ConsoleAdventure.Controller
+namespace ConsoleAdventure
 {
     class Main_Game_Loop
     {
@@ -17,11 +18,14 @@ namespace ConsoleAdventure.Controller
 
         static void Main(string[] args)
         {
+            Random rnd = new();
             Global_Values.action_Ident = -1;
             Global_Values.gamestate = 1;
+            Global_Values.Seed = rnd.Next();
 #if DEBUG
             // _cc.generate_View();
             _cc.generate_Room_View();
+            // Global_Values.Seed = 743754704;
 #endif
             while (Global_Values.action_Ident == -1)
             {

@@ -15,25 +15,43 @@ namespace ConsoleAdventure
         private bool _west_block = false;
         private bool _east_block = false;
 
-        public bool north_b = false;
-        public bool south_b = false;
-        public bool west_b = false;
-        public bool east_b = false;
+        private bool north_path = false;
+        private bool south_path = false;
+        private bool west_path = false;
+        private bool east_path = false;
 
-        private string _origin = "";
-        public int id = 0;
-        public string path_taken = "";
+        private Random random = new(Global_Values.Seed);
+        private int new_doors = 0;
+
+        public int id { get; private set; }
+        public bool visited { get; private set; }
+        public int ident { get; private set; }
+        public int x { get; private set; }
+        public int y { get; private set; }
 
         private List<string> _room_Ascii = new List<string>();
 
-        public Room(int id, string origin = "", bool north_block = false, bool south_block = false, bool west_block = false, bool east_block = false)
+        public Room(int id, int x = 0, int y = 0, int max_new = 0,
+            bool north_block = false, bool south_block = false, bool west_block = false, bool east_block = false,
+            bool north_path = false, bool south_path = false, bool west_path = false, bool east_path = false)
         {
             this.id = id;
-            _origin = origin;
+            visited = false;
+            new_doors = max_new;
+
             _north_block = north_block;
             _south_block = south_block;
             _west_block = west_block;
             _east_block = east_block;
+
+            this.north_path = north_path;
+            this.south_path = south_path;
+            this.west_path = west_path;
+            this.east_path = east_path;
+
+            this.x = x;
+            this.y = y;
+
             Room_Construct();
         }
 
@@ -42,70 +60,91 @@ namespace ConsoleAdventure
             return _room_Ascii;
         }
 
-        public void set_path(string path)
+        public void is_visited(bool is_visitied)
         {
-            path_taken = path;
+            visited = is_visitied;
         }
 
         private void Room_Construct()
         {
-            bool origin_north = false;
-            bool origin_south = false;
-            bool origin_west = false;
-            bool origin_east = false;
-
-            Random random = new();
-
-            switch (_origin)
+            List<bool> block = new() { false, false, false };
+            if (new_doors <= 2)
             {
-                case "north":
-                    origin_north = true;
-                    break;
-                case "south":
-                    origin_south = true;
-                    break;
-                case "west":
-                    origin_west = true;
-                    break;
-                case "east":
-                    origin_east = true;
-                    break;
+                if (new_doors == 2)
+                    block = [true, false, false];
+                if (new_doors == 1)
+                    block = [true, true, false];
+                if (new_doors == 0)
+                    block = [true, true, true];
+                int n = block.Count;
+                while (n > 1)
+                {
+                    n--;
+                    int k = random.Next(n + 1);
+                    bool value = block[k];
+                    block[k] = block[n];
+                    block[n] = value;
+                }
             }
-
-            north_b = !origin_north && (_north_block || random.Next(2) == 1);
-            south_b = !origin_south && (_south_block || random.Next(2) == 1);
-            west_b = !origin_west && (_west_block || random.Next(2) == 1);
-            east_b = !origin_east && (_east_block || random.Next(2) == 1);
-            _room_Ascii = Generate_Room(north_b, east_b, south_b, west_b);
+            int block_chance = new_doors >= 4 ? 5 : 40;
+            bool _north_block;
+            bool _south_block;
+            bool _west_block;
+            bool _east_block;
+            if (north_path)
+            {
+                _north_block = false;
+                _south_block = this._south_block || random.Next(100) <= block_chance || block[0];
+                _west_block = this._west_block || random.Next(100) <= block_chance || block[1];
+                _east_block = this._east_block || random.Next(100) <= block_chance || block[2];
+            }
+            else if (south_path)
+            {
+                _north_block = this._north_block || random.Next(100) <= block_chance || block[0];
+                _south_block = false;
+                _west_block = this._west_block || random.Next(100) <= block_chance || block[1];
+                _east_block = this._east_block || random.Next(100) <= block_chance || block[2];
+            }
+            else if (west_path)
+            {
+                _north_block = this._north_block || random.Next(100) <= block_chance || block[0];
+                _south_block = this._south_block || random.Next(100) <= block_chance || block[1];
+                _west_block = false;
+                _east_block = this._east_block || random.Next(100) <= block_chance || block[2];
+            }
+            else
+            {
+                _north_block = this._north_block || random.Next(100) <= block_chance || block[0];
+                _south_block = this._south_block || random.Next(100) <= block_chance || block[1];
+                _west_block = this._west_block || random.Next(100) <= block_chance || block[2];
+                _east_block = false;
+            }
+            _room_Ascii = Generate_Room(_north_block, _east_block, _south_block, _west_block);
 
             //    0 → deadend
-            //    1 → 1-way west
-            //   10 → 1-way north
-            //  100 → 1-way east
-            // 1000 → 1-way south
-            int ident = 0;
-            if (west_b)
+            //    1 → west
+            //   10 → north
+            //  100 → east
+            // 1000 → south
+            ident = 0;
+            if (!_west_block && !west_path)
             {
                 ident += 1;
             }
-            if (north_b)
+            if (!_north_block && !north_path)
             {
                 ident += 10;
             }
-            if (east_b)
+            if (!_east_block && !east_path)
             {
                 ident += 100;
             }
-            if (south_b)
+            if (!_south_block && !south_path)
             {
                 ident += 1000;
             }
-            Global_Values.room_Ident = ident;
+            //Global_Values.room_Ident = ident;
 
-            if (north_b && south_b && west_b && east_b && _origin.Equals(""))
-            {
-                Room_Construct();
-            }
 
         }
 
@@ -121,10 +160,20 @@ namespace ConsoleAdventure
             List<string> _east = east.get_Ascii(east_b);
             List<string> _south = south.get_Ascii(south_b);
             List<string> _west = west.get_Ascii(west_b);
-            room.Add(_north[0]);
-            room.Add(_west[1] + new string(' ', _north[0].Length - 2) + _east[1]);
-            room.Add(_west[2] + new string(' ', _north[0].Length - 2) + _east[2]);
-            room.Add(_south[0]);
+            int width = _north[0].Length;
+            int height = _north.Count + _east.Count + _south.Count + _west.Count;
+            foreach (string s in _north)
+            {
+                room.Add(s);
+            }
+            for (int i = 0; i < _east.Count; i++)
+            {
+                room.Add(_west[i] + new string(' ', _north[0].Length - _east[i].Length - _west[i].Length) + _east[i]);
+            }
+            foreach (string s in _south)
+            {
+                room.Add(s);
+            }
             return room;
         }
     }
