@@ -39,7 +39,7 @@ namespace ConsoleAdventure
 
         public static int room_count { get; set; }
 
-        private static Random rng = new();
+        public static Random rng = new();
         public static void Shuffle<T>(this IList<T> list)
         {
             int n = list.Count;

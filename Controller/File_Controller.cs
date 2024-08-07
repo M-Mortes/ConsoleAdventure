@@ -88,28 +88,20 @@ namespace ConsoleAdventure.Controller
             foreach (Room room in rooms)
             {
                 if (min_x > room.x)
-                {
                     min_x = room.x;
-                }
                 if (min_y > room.y)
-                {
                     min_y = room.y;
-                }
                 if (max_x < room.x)
-                {
                     max_x = room.x;
-                }
                 if (max_y < room.y)
-                {
                     max_y = room.y;
-                }
             }
             for (int y = max_y; y >= min_y; y--)
             {
                 List<string> map_part = new();
                 for (int x = min_x; x <= max_x; x++)
                 {
-                    if (rooms.Exists(room => room.x == x && room.y == y))
+                    if (rooms.Find(room => room.x == x && room.y == y) != null)
                     {
                         if (map_part.Count == 0)
                         {
