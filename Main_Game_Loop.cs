@@ -19,15 +19,16 @@ namespace ConsoleAdventure
         static void Main(string[] args)
         {
 #if DEBUG
+            Global_Values.level = 1;
             // _cc.generate_View();
-            Global_Values.level = 24;
             Global_Values.seed = 1;
             _cc.generate_Room_View();
+#else
 #endif
             Global_Values.rng = Global_Values.seed == 0 ? new() : new(Global_Values.seed);
             Global_Values.action_Ident = -1;
             Global_Values.gamestate = 1;
-            //Global_Values.Seed = rnd.Next();
+
             while (true)
             {
                 _ac.next_Action();

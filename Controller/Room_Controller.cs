@@ -40,7 +40,6 @@ namespace ConsoleAdventure.Controller
         public List<Room> _rooms = new List<Room>();
 
         private int _room_id = 0;
-        private Random _random = Global_Values.rng;
 
         public List<string> get_Current_Room(int id)
         {
@@ -50,7 +49,7 @@ namespace ConsoleAdventure.Controller
         public void generate_Map(int level)
         {
             _room_id = 1;
-            Global_Values.room_count = 6 + level + _random.Next(0, level);
+            Global_Values.room_count = 6 + level + Global_Values.rng.Next(0, level);
             _generate_Room(new Room(_room_id, doors: Global_Values.room_count));
 
             _rooms.FindAll(room => room.open_doors > 0);

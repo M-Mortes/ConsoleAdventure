@@ -13,7 +13,6 @@ namespace ConsoleAdventure
         Human entity_h = new Human();
         Human_Warrior entity_hw = new Human_Warrior();
         Human_Mage entity_hm = new Human_Mage();
-        Random rand = new(Global_Values.seed);
 
         int level = 0;
         float health = 0f;
@@ -34,7 +33,7 @@ namespace ConsoleAdventure
         {
             this.level = lvl;
             float lvl_points = level * 0.04f;
-            int nbr = rand.Next(3);
+            int nbr = Global_Values.rng.Next(3);
             if (nbr == 0)
             {
                 var enemy = entity_h;

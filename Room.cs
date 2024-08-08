@@ -17,7 +17,6 @@ namespace ConsoleAdventure
         private bool _west_path = false;
         private bool _east_path = false;
 
-        private Random _random = Global_Values.rng;
         private int _new_doors = 0;
 
         public bool north_block = false;
@@ -155,7 +154,7 @@ namespace ConsoleAdventure
                 int path_2_chance = chances[2];
                 int path_3_chance = chances[3];
 
-                int chance = _random.Next(100);
+                int chance = Global_Values.rng.Next(100);
                 if (chance >= 0 && chance < deadend_chance)
                     amount = 0;
                 else if (chance >= deadend_chance && chance < deadend_chance + path_1_chance)
@@ -179,7 +178,7 @@ namespace ConsoleAdventure
 
             while (amount > 0)
             {
-                int chance = _random.Next(orient.Count);
+                int chance = Global_Values.rng.Next(orient.Count);
                 string door = orient[chance];
                 if (_north_block && door.Equals("north"))
                 {
@@ -224,19 +223,24 @@ namespace ConsoleAdventure
             List<string> _west = west.get_Ascii(west_b);
             int width = _north[0].Length;
             int height = _north.Count + _east.Count + _south.Count + _west.Count;
+
             foreach (string s in _north)
             {
                 room.Add(s);
             }
             for (int i = 0; i < _east.Count; i++)
             {
-                // room.Add(_west[i] + new string(' ', _north[0].Length - _east[i].Length - _west[i].Length) + _east[i]);
+#if DEBUG
                 room.Add(_west[i] + new string(' ', (_north[0].Length - _east[i].Length - _west[i].Length) / 2 - id.ToString().Length) + id + new string(' ', (_north[0].Length - _east[i].Length - _west[i].Length) / 2) + _east[i]);
+#else
+                room.Add(_west[i] + new string(' ', _north[0].Length - _east[i].Length - _west[i].Length) + _east[i]);
+#endif
             }
             foreach (string s in _south)
             {
                 room.Add(s);
             }
+
             return room;
         }
     }

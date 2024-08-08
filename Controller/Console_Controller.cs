@@ -57,15 +57,13 @@ namespace ConsoleAdventure.Controller
             List<string> _console_frame_2 = _ccf._console_frame_2;
             List<string> _console_frame_3 = _ccf._console_frame_3;
 
-            Random rng = Global_Values.rng;
-            _console_frame_1 = Add_To_Frame(_console_frame_1, _rc.get_Current_Room(rng.Next(_rc._rooms.Count) + 1));
+            _console_frame_1 = Add_To_Frame(_console_frame_1, _rc.get_Current_Room(Global_Values.rng.Next(_rc._rooms.Count) + 1));
             Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
         }
 
         public void generate_View()
         {
-            Random random = new(Global_Values.seed);
-            if (random.Next(2) == 1)
+            if (Global_Values.rng.Next(2) == 1)
             {
                 generate_Enemy_View();
             }
