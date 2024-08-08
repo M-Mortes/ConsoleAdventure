@@ -12,18 +12,20 @@ namespace ConsoleAdventure
 {
     internal class Room
     {
+        private bool _north_path = false;
+        private bool _south_path = false;
+        private bool _west_path = false;
+        private bool _east_path = false;
+
+        private Random _random = Global_Values.rng;
+        private int _new_doors = 0;
+
         public bool north_block = false;
         public bool south_block = false;
         public bool west_block = false;
         public bool east_block = false;
 
-        private bool north_path = false;
-        private bool south_path = false;
-        private bool west_path = false;
-        private bool east_path = false;
-
-        private Random random = Global_Values.rng;
-        private int new_doors = 0;
+        public int open_doors = 0;
 
         public int id { get; private set; }
         public bool visited { get; private set; }
@@ -33,23 +35,23 @@ namespace ConsoleAdventure
 
         private List<string> _room_Ascii = new List<string>();
 
-        public Room(int id, int x = 0, int y = 0, int max_new = 0,
+        public Room(int id, int x = 0, int y = 0, int doors = 0,
             bool north_block = false, bool south_block = false, bool west_block = false, bool east_block = false,
             bool north_path = false, bool south_path = false, bool west_path = false, bool east_path = false)
         {
             this.id = id;
             visited = false;
-            new_doors = max_new;
+            _new_doors = doors;
 
             this.north_block = north_block;
             this.south_block = south_block;
             this.west_block = west_block;
             this.east_block = east_block;
 
-            this.north_path = north_path;
-            this.south_path = south_path;
-            this.west_path = west_path;
-            this.east_path = east_path;
+            this._north_path = north_path;
+            this._south_path = south_path;
+            this._west_path = west_path;
+            this._east_path = east_path;
 
             this.x = x;
             this.y = y;
@@ -74,13 +76,20 @@ namespace ConsoleAdventure
             bool _west_block = false;
             bool _east_block = false;
 
-            if (new_doors != 0)
+            if (_new_doors != 0)
             {
-                var sites = distrbute_Doors(new_doors);
+                var sites = distrbute_Doors(_new_doors);
                 _north_block = sites.north;
                 _south_block = sites.south;
                 _west_block = sites.west;
                 _east_block = sites.east;
+            }
+            else
+            {
+                _north_block = true;
+                _south_block = true;
+                _west_block = true;
+                _east_block = true;
             }
 
             if (id == 1)
@@ -91,12 +100,13 @@ namespace ConsoleAdventure
                 _east_block = list[1];
                 _south_block = list[2];
                 _west_block = list[3];
+                open_doors = 3;
             }
 
-            _north_block = north_path ? false : north_block ? north_block : _north_block;
-            _south_block = south_path ? false : south_block ? south_block : _south_block;
-            _west_block = west_path ? false : west_block ? west_block : _west_block;
-            _east_block = east_path ? false : east_block ? east_block : _east_block;
+            _north_block = _north_path ? false : north_block ? north_block : _north_block;
+            _south_block = _south_path ? false : south_block ? south_block : _south_block;
+            _west_block = _west_path ? false : west_block ? west_block : _west_block;
+            _east_block = _east_path ? false : east_block ? east_block : _east_block;
 
             _room_Ascii = Generate_Room(_north_block, _east_block, _south_block, _west_block);
 
@@ -106,13 +116,13 @@ namespace ConsoleAdventure
             //  100 → east
             // 1000 → south
             ident = 0;
-            if (!_west_block && !west_path)
+            if (!_west_block && !_west_path)
                 ident += 1;
-            if (!_north_block && !north_path)
+            if (!_north_block && !_north_path)
                 ident += 10;
-            if (!_east_block && !east_path)
+            if (!_east_block && !_east_path)
                 ident += 100;
-            if (!_south_block && !south_path)
+            if (!_south_block && !_south_path)
                 ident += 1000;
             north_block = _north_block;
             south_block = _south_block;
@@ -129,20 +139,23 @@ namespace ConsoleAdventure
         {
             List<string> orient = new() { "north", "south", "west", "east" };
 
-            bool _north_block = !north_path;
-            bool _south_block = !south_path;
-            bool _west_block = !west_path;
-            bool _east_block = !east_path;
+            bool _north_block = !_north_path;
+            bool _south_block = !_south_path;
+            bool _west_block = !_west_path;
+            bool _east_block = !_east_path;
+            List<int> chances = new() { 1, 59, 25, 15 };
+
+            if (amount < 0)
+                return (_north_block, _south_block, _west_block, _east_block);
 
             if (amount >= 3)
             {
-                List<int> chances = new() { 10, 40, 35, 15 };
                 int deadend_chance = chances[0];
                 int path_1_chance = chances[1];
                 int path_2_chance = chances[2];
                 int path_3_chance = chances[3];
 
-                int chance = random.Next(100);
+                int chance = _random.Next(100);
                 if (chance >= 0 && chance < deadend_chance)
                     amount = 0;
                 else if (chance >= deadend_chance && chance < deadend_chance + path_1_chance)
@@ -152,6 +165,8 @@ namespace ConsoleAdventure
                 else if (chance >= path_2_chance && chance < path_3_chance + path_2_chance + path_1_chance + deadend_chance)
                     amount = 3;
             }
+
+            open_doors = amount;
 
             if (amount == 3)
             {
@@ -164,7 +179,7 @@ namespace ConsoleAdventure
 
             while (amount > 0)
             {
-                int chance = random.Next(orient.Count);
+                int chance = _random.Next(orient.Count);
                 string door = orient[chance];
                 if (_north_block && door.Equals("north"))
                 {
@@ -186,6 +201,8 @@ namespace ConsoleAdventure
                     _east_block = false;
                     orient.Remove(door);
                 }
+                else if (!_north_block && !_south_block && !_west_block && !_east_block)
+                    amount = 0;
                 else
                     continue;
                 amount--;
@@ -213,7 +230,8 @@ namespace ConsoleAdventure
             }
             for (int i = 0; i < _east.Count; i++)
             {
-                room.Add(_west[i] + new string(' ', _north[0].Length - _east[i].Length - _west[i].Length) + _east[i]);
+                // room.Add(_west[i] + new string(' ', _north[0].Length - _east[i].Length - _west[i].Length) + _east[i]);
+                room.Add(_west[i] + new string(' ', (_north[0].Length - _east[i].Length - _west[i].Length) / 2 - id.ToString().Length) + id + new string(' ', (_north[0].Length - _east[i].Length - _west[i].Length) / 2) + _east[i]);
             }
             foreach (string s in _south)
             {

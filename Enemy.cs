@@ -13,7 +13,7 @@ namespace ConsoleAdventure
         Human entity_h = new Human();
         Human_Warrior entity_hw = new Human_Warrior();
         Human_Mage entity_hm = new Human_Mage();
-        Random rand = new(Global_Values.Seed);
+        Random rand = new(Global_Values.seed);
 
         int level = 0;
         float health = 0f;

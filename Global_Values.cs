@@ -9,6 +9,8 @@ namespace ConsoleAdventure
 {
     public static class Global_Values
     {
+        private static Random random = new Random();
+        public static int level { get; set;  }
         // ###########
         // 1 → ..
         // 2 → ..
@@ -35,11 +37,13 @@ namespace ConsoleAdventure
         // 1111 → 4-way north-south-east-west
         public static int room_Ident { get; set; }
 
-        public static int Seed { get; set; }
+        public static int seed = random.Next();
+
+        public static Random rng = new Random(seed);
 
         public static int room_count { get; set; }
 
-        public static Random rng = new();
+
         public static void Shuffle<T>(this IList<T> list)
         {
             int n = list.Count;

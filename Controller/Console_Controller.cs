@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Channels;
@@ -21,7 +22,7 @@ namespace ConsoleAdventure.Controller
         private static int _frame_3_hight = 8;
         private static int _frame_3_width = 118;
 
-        private Room_Controller room_controller = new Room_Controller();
+        private Room_Controller _rc = new Room_Controller();
 
         public Console_Controller()
         {
@@ -50,19 +51,20 @@ namespace ConsoleAdventure.Controller
         public void generate_Room_View()
         {
             var _ccf = Clear_Console_Frame();
-            room_controller.generate_Map(1);
+            _rc.generate_Map(Global_Values.level);
 
             List<string> _console_frame_1 = _ccf._console_frame_1;
             List<string> _console_frame_2 = _ccf._console_frame_2;
             List<string> _console_frame_3 = _ccf._console_frame_3;
 
-            _console_frame_1 = Add_To_Frame(_console_frame_1, room_controller.get_Current_Room());
+            Random rng = Global_Values.rng;
+            _console_frame_1 = Add_To_Frame(_console_frame_1, _rc.get_Current_Room(rng.Next(_rc._rooms.Count) + 1));
             Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
         }
 
         public void generate_View()
         {
-            Random random = new(Global_Values.Seed);
+            Random random = new(Global_Values.seed);
             if (random.Next(2) == 1)
             {
                 generate_Enemy_View();
@@ -160,7 +162,7 @@ namespace ConsoleAdventure.Controller
                     text = new();
                     int max = ((int)Math.Ceiling((double)list.Count / lines)) * lines;
                     text = list.GetRange(0, lines);
-                    for(int i = list.Count; i <= max; i++)
+                    for (int i = list.Count; i <= max; i++)
                         list.Add("");
                     for (int i = lines; i < max; i += lines)
                     {
