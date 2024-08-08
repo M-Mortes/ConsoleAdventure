@@ -21,6 +21,7 @@ namespace ConsoleAdventure.Controller
         private static int _frame_2_width = 39;
         private static int _frame_3_hight = 8;
         private static int _frame_3_width = 118;
+        private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) _ccf;
 
         private Room_Controller _rc = new Room_Controller();
 
@@ -30,6 +31,7 @@ namespace ConsoleAdventure.Controller
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
             Console.Title = "Console Adventure";
+            _ccf = Clear_Console_Frame();
 
 
             // Console.CursorVisible = false;
@@ -38,27 +40,26 @@ namespace ConsoleAdventure.Controller
         public void generate_Enemy_View()
         {
             Enemy enemy = new Enemy();
-            var _ccf = Clear_Console_Frame();
 
-            List<string> _console_frame_1 = _ccf._console_frame_1;
-            List<string> _console_frame_2 = _ccf._console_frame_2;
-            List<string> _console_frame_3 = _ccf._console_frame_3;
-            _console_frame_1 = Add_To_Frame(_console_frame_1, String_List_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
-            _console_frame_2 = String_Replace(_console_frame_2, enemy.get_stats());
-            Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+            Global_Values.frame_1_text = _ccf._console_frame_1;
+            Global_Values.frame_2_text = _ccf._console_frame_2;
+            Global_Values.frame_3_text = _ccf._console_frame_3;
+
+            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, String_List_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
+            Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text, enemy.get_stats());
+            Update_Console();
         }
 
         public void generate_Room_View()
         {
-            var _ccf = Clear_Console_Frame();
             _rc.generate_Map(Global_Values.level);
 
-            List<string> _console_frame_1 = _ccf._console_frame_1;
-            List<string> _console_frame_2 = _ccf._console_frame_2;
-            List<string> _console_frame_3 = _ccf._console_frame_3;
+            Global_Values.frame_1_text = _ccf._console_frame_1;
+            Global_Values.frame_2_text = _ccf._console_frame_2;
+            Global_Values.frame_3_text = _ccf._console_frame_3;
 
-            _console_frame_1 = Add_To_Frame(_console_frame_1, _rc.get_Current_Room(Global_Values.rng.Next(_rc._rooms.Count) + 1));
-            Update_Console(_console_frame_1, _console_frame_2, _console_frame_3);
+            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, _rc.get_Current_Room(Global_Values.rng.Next(_rc._rooms.Count) + 1));
+            Update_Console();
         }
 
         public void generate_View()
@@ -102,7 +103,7 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // writes the view with spacers
-        private void Update_Console(List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3)
+        private void Update_Console()
         {
             string _full = new('#', _width);
 
@@ -129,17 +130,17 @@ namespace ConsoleAdventure.Controller
                 "20"
                 ];
 
-            _console_frame_1 = String_Replace(_console_frame_1);
-            _console_frame_2 = String_Replace(_console_frame_2);
-            _console_frame_3 = String_Replace(_console_frame_3);
+            Global_Values.frame_1_text = String_Replace(Global_Values.frame_1_text);
+            Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text);
+            Global_Values.frame_3_text = String_Replace(Global_Values.frame_3_text);
 
             Console.WriteLine(_full);
-            for (int i = 0; i < _console_frame_1.Count(); i++)
+            for (int i = 0; i < Global_Values.frame_1_text.Count(); i++)
             {
-                Console.WriteLine("#" + _console_frame_1[i] + "#" + _console_frame_2[i] + "#");
+                Console.WriteLine("#" + Global_Values.frame_1_text[i] + "#" + Global_Values.frame_2_text[i] + "#");
             }
             Console.WriteLine(_full);
-            foreach (var str in _console_frame_3)
+            foreach (var str in Global_Values.frame_3_text)
             {
                 Console.WriteLine("#" + str + "#");
             }

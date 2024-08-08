@@ -10,9 +10,10 @@ namespace ConsoleAdventure
     public static class Global_Values
     {
         private static Random random = new Random();
+
         public static int level { get; set;  }
-        // ###########
-        // 1 → ..
+        // ######################
+        // 1 → exploration
         // 2 → ..
         public static int gamestate { get; set; }
         // ######################
@@ -22,19 +23,8 @@ namespace ConsoleAdventure
         //    0 → deadend
         //    1 → 1-way west
         //   10 → 1-way north
-        //   11 → 2-way west-north
         //  100 → 1-way east
-        //  101 → 2-way west-east
-        //  110 → 2-way north-east
-        //  111 → 3-way west-north-east
         // 1000 → 1-way south
-        // 1001 → 2-way west-south
-        // 1010 → 2-way north-south
-        // 1011 → 3-way west-north-south
-        // 1100 → 2-way east-south
-        // 1101 → 3-way west-east-south
-        // 1110 → 3-way north-south-east
-        // 1111 → 4-way north-south-east-west
         public static int room_Ident { get; set; }
 
         public static int seed = random.Next();
@@ -43,6 +33,9 @@ namespace ConsoleAdventure
 
         public static int room_count { get; set; }
 
+        public static List<string> frame_1_text { get; set; }
+        public static List<string> frame_2_text { get; set; }
+        public static List<string> frame_3_text { get; set; }
 
         public static void Shuffle<T>(this IList<T> list)
         {

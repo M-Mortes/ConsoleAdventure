@@ -39,7 +39,13 @@ namespace ConsoleAdventure.Controller
     {
         public List<Room> _rooms = new List<Room>();
 
+        private Player _player;
         private int _room_id = 0;
+
+        public Room_Controller(Player player)
+        {
+            _player = player;
+        }
 
         public List<string> get_Current_Room(int id)
         {

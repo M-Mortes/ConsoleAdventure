@@ -45,37 +45,9 @@ namespace ConsoleAdventure.Controller
         {
             int gamestate = Global_Values.gamestate;
             int ident = Global_Values.action_Ident;
-            switch (gamestate)
+            if (gamestate == 1)
             {
-                case 1:
-                    break;
-            }
-        }
 
-        private void ident_action_walk(int ident)
-        {
-            switch (ident)
-            {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-                case 7:
-                    break;
-                case 8:
-                    break;
-                case 9:
-                    break;
             }
         }
     }
