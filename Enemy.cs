@@ -33,8 +33,8 @@ namespace ConsoleAdventure
             List<Human> list = [new Human().Normal(), new Human().Warriro(), new Human().Mage()];
             int nbr = Global_Values.rng.Next(list.Count);
 
-            //Human enemy = list[nbr];
-            Human enemy = list[1];
+            Human enemy = list[nbr];
+            // Human enemy = list[1];
             _id = enemy.id;
             _stat_str = enemy.str_multi;
             _stat_perc = enemy.perc_multi;

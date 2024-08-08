@@ -24,6 +24,7 @@ namespace ConsoleAdventure.Entitys
         float agi_gear_boni = 0f;
         float lck_level_boni = 0f;
         float lck_gear_boni = 0f;
+
         public Player()
         {
 
@@ -42,16 +43,16 @@ namespace ConsoleAdventure.Entitys
             return stats;
         }
 
-        public List<string> get_stats_raw()
+        public List<float> get_stats_raw()
         {
-            List<string> stats = new List<string>();
-            stats.Add((str_multi * level + str_gear_boni + str_level_boni).ToString());
-            stats.Add((perc_multi * level + perc_gear_boni + perc_level_boni).ToString());
-            stats.Add((dex_multi * level + dex_gear_boni + dex_level_boni).ToString());
-            stats.Add((char_multi * level + char_gear_boni + char_level_boni).ToString());
-            stats.Add((int_multi * level + int_gear_boni + int_level_boni).ToString());
-            stats.Add((agi_multi * level + agi_gear_boni + agi_level_boni).ToString());
-            stats.Add((lck_multi * level + lck_gear_boni + lck_level_boni).ToString());
+            List<float> stats = new List<float>();
+            stats.Add(str_multi * level + str_gear_boni + str_level_boni);
+            stats.Add(perc_multi * level + perc_gear_boni + perc_level_boni);
+            stats.Add(dex_multi * level + dex_gear_boni + dex_level_boni);
+            stats.Add(char_multi * level + char_gear_boni + char_level_boni);
+            stats.Add(int_multi * level + int_gear_boni + int_level_boni);
+            stats.Add(agi_multi * level + agi_gear_boni + agi_level_boni);
+            stats.Add(lck_multi * level + lck_gear_boni + lck_level_boni);
             return stats;
         }
     }

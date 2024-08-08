@@ -7,6 +7,21 @@ using System;
 using ConsoleAdventure.Entitys;
 using ConsoleAdventure.Controller;
 
+/* TODO:
+ * Aktionen
+ * Erkunden
+ * Kampf
+ * Ausrüstung
+ * Inventar
+ * Events (was auch immer das wird)
+ * statuseffekte
+ * Gegner +
+ * Klassen +
+ * Schadensarten (magie, physisch, fern-, special-, ulti....)
+ * custom ausrüstung via txt
+ * custom klassen / gegner via txt
+ * */
+
 namespace ConsoleAdventure
 {
     class Main_Game_Loop
