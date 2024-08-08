@@ -15,6 +15,25 @@ namespace ConsoleAdventure.Entitys
      * agility
      * luck
      */
+
+
+    /*
+     * "    ____     ",
+     * "   /    \    ",
+     * "  /      |   ",
+     * "  \      |   ",
+     * "   \____/    ",
+     * "    /   \    ",
+     * "   / / \ \   ",
+     * "  / /| |\ \  ",
+     * " / / | | \ \ ",
+     * "/_/  | |  \_\",
+     * "    _|_|_    ",
+     * "   / / \ \   ",
+     * "  / /   \ \  ",
+     * " / /     \ \ ",
+     * "/_/       \_\" 
+     */
     internal class Human
     {
         public float str_multi = 0f;
@@ -38,10 +57,6 @@ namespace ConsoleAdventure.Entitys
             lck_multi = 1.0f;
 
             id = 1;
-            List<string> get_Ascii()
-            {
-                return this.get_Ascii();
-            }
             return this;
         }
         public Human Mage()
@@ -55,10 +70,6 @@ namespace ConsoleAdventure.Entitys
             lck_multi = 1.2f;
 
             id = 2;
-            List<string> get_Ascii()
-            {
-                return this.get_Ascii();
-            }
             return this;
         }
         public Human Warriro()
@@ -72,10 +83,6 @@ namespace ConsoleAdventure.Entitys
             lck_multi = 0.9f;
 
             id = 3;
-            List<string> get_Ascii()
-            {
-                return this.get_Ascii();
-            }
             return this;
         }
 
@@ -92,7 +99,6 @@ namespace ConsoleAdventure.Entitys
                 "  / /| |\\ \\  ",
                 " / / | | \\ \\ ",
                 "/_/  | |  \\_\\",
-                "     | |       ",
                 "    _|_|_      ",
                 "   / / \\ \\   ",
                 "  / /   \\ \\  ",
@@ -113,7 +119,6 @@ namespace ConsoleAdventure.Entitys
                 "  / /| |\\ \\|| ",
                 " / / | | \\ ||  ",
                 "/_/  | |  \\||  ",
-                "     | |   ||   ",
                 "    _|_|_  ||   ",
                 "   / / \\ \\ || ",
                 "  / /   \\ \\|| ",
@@ -127,18 +132,17 @@ namespace ConsoleAdventure.Entitys
                 "        /    \\       ",
                 "       /      \\      ",
                 "       \\      /      ",
-                "        \\____/       ",
-                "        [/   \\]  /\\ ",
+                "        \\____/   /\\ ",
+                "        [/   \\]  || ",
                 "  ____ [/ / \\ \\] || ",
                 " /    \\/ /| |\\ \\]||",
                 "/      \\/[| |]\\ \\||",
-                "\\      / [| |] \\ || ",
-                " \\____/  [| |]  \\II ",
-                "        [_|_|_]  II   ",
-                "        / / \\ \\     ",
-                "       / /   \\ \\    ",
-                "      / /     \\ \\   ",
-                "     /_/       \\_\\  "];
+                "\\      / [| |] \\ II ",
+                " \\____/ [_|_|_] \\II ",
+                "       [/ / \\ \\]    ",
+                "      [/ /   \\ \\]   ",
+                "     [/ /     \\ \\]  ",
+                "    [/_/       \\_\\] "];
             if (id == 3)
                 return knight;
 
@@ -161,5 +165,6 @@ namespace ConsoleAdventure.Entitys
                 "               "];
             return _default;
         }
+
     }
 }

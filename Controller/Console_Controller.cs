@@ -13,6 +13,7 @@ namespace ConsoleAdventure.Controller
 {
     internal class Console_Controller
     {
+        private static Player _player;
         private int _hight = 29;
         private int _width = 120;
         private static int _frame_1_hight = 18;
@@ -23,11 +24,11 @@ namespace ConsoleAdventure.Controller
         private static int _frame_3_width = 118;
         private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) _ccf;
 
-        private Room_Controller _rc = new Room_Controller();
+        private Room_Controller _rc = new Room_Controller(_player);
 
-        public Console_Controller()
+        public Console_Controller(Player player)
         {
-
+            _player = player;
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
             Console.Title = "Console Adventure";
@@ -45,8 +46,8 @@ namespace ConsoleAdventure.Controller
             Global_Values.frame_2_text = _ccf._console_frame_2;
             Global_Values.frame_3_text = _ccf._console_frame_3;
 
-            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, String_List_Combine(enemy.ascii, Reverse_Char(enemy.ascii), _frame_1_width));
-            Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text, enemy.get_stats());
+            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, String_List_Combine(_player.get_Ascii(), Reverse_Char(enemy.ascii), _frame_1_width));
+            Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text, generate_Status_Table(enemy.get_stats()));
             Update_Console();
         }
 
@@ -212,32 +213,28 @@ namespace ConsoleAdventure.Controller
             List<string> _list_left = new List<string>();
             List<string> _list_right = new List<string>();
             int max_size = _left.Count >= _right.Count ? _left.Count : _right.Count;
-            if (_left.Count < max_size)
-            {
-                for (int i = _left.Count; i <= max_size; i++)
-                    _left.Append<string>(new string(' ', _left[0].Length)).ToList();
-            }
-            else if (_right.Count < max_size)
-            {
-                for (int i = _right.Count; i <= max_size; i++)
-                    _right.Append<string>(new string(' ', _right[0].Length)).ToList();
-            }
             _list_right = _right;
             _list_left = _left;
+            if (_list_left.Count < max_size)
+            {
+                for (int i = _list_left.Count; i < max_size; i++)
+                    _list_left = _list_left.Prepend(new string(' ', _list_left[0].Length)).ToList();
+            }
+            else if (_list_right.Count < max_size)
+            {
+                for (int i = _list_right.Count; i < max_size; i++)
+                    _list_right = _list_right.Prepend(new string(' ', _list_right[0].Length)).ToList();
+            }
 
             if (_width == 0)
             {
                 int max_left = 0;
-                foreach (string str in _left)
-                {
+                foreach (string str in _list_left)
                     if (str.Length > max_left)
-                    {
                         max_left = str.Length;
-                    }
-                }
                 for (int i = 0; i < max_size; i++)
                 {
-                    _list.Add(_left[i] + new string(' ', 1 + max_left - _left[i].Length) + _right[i]);
+                    _list.Add(_list_left[i] + new string(' ', 1 + max_left - _list_left[i].Length) + _list_right[i]);
                 }
             }
             else
@@ -295,6 +292,29 @@ namespace ConsoleAdventure.Controller
                 new_string.Add(new string(charArray));
             }
             return new_string;
+        }
+
+        private List<string> generate_Status_Table(List<string> enemy_stat)
+        {
+            List<string> player_stat = _player.get_stats();
+            List<string> stat_table = new();
+            string player_txt = "Player";
+            string enemy_txt = "Enemy";
+            int max_len = 0;
+            foreach (string str in player_stat)
+                if (str.Length > max_len)
+                    max_len = str.Length;
+            foreach (string str in enemy_stat)
+                if (str.Length > max_len)
+                    max_len = str.Length;
+            stat_table.Add(new string(' ', (max_len + 1) / 2 - player_txt.Length / 2) + player_txt + new string(' ', (max_len + 1) / 2 - player_txt.Length / 2) +
+                '|' + new string(' ', (max_len + 1) / 2 - enemy_txt.Length / 2) + enemy_txt + new string(' ', (max_len) / 2 - enemy_txt.Length / 2));
+            stat_table.Add(new string('-', max_len + 1) + '|' + new string('-', max_len + 1));
+            for (int i = 0; i < player_stat.Count; i++)
+            {
+                stat_table.Add(new string(' ', max_len - player_stat[i].Length) + player_stat[i] + " | " + enemy_stat[i]);
+            }
+            return stat_table;
         }
     }
 

@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using ConsoleAdventure.Room_Parts;
+using ConsoleAdventure.Entitys;
 
 namespace ConsoleAdventure.Controller
 {
     internal class File_Controller
     {
+        private Player _player;
+        public File_Controller(Player player)
+        {
+            _player = player;
+        }
         private void Write_File(List<string> text, string file_name)
         {
             string file = file_name + ".txt";

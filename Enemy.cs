@@ -26,14 +26,15 @@ namespace ConsoleAdventure
 
         public List<string> ascii = new List<string>();
 
-        public Enemy(int lvl = 0)
+        public Enemy(int lvl = 1)
         {
             this._level = lvl;
             float lvl_points = _level * 0.04f;
             List<Human> list = [new Human().Normal(), new Human().Warriro(), new Human().Mage()];
             int nbr = Global_Values.rng.Next(list.Count);
 
-            Human enemy = list[nbr];
+            //Human enemy = list[nbr];
+            Human enemy = list[1];
             _id = enemy.id;
             _stat_str = enemy.str_multi;
             _stat_perc = enemy.perc_multi;

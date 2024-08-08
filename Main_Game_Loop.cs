@@ -11,11 +11,11 @@ namespace ConsoleAdventure
 {
     class Main_Game_Loop
     {
-        Player player = (Player)new Player().Normal();
-        private static Console_Controller _cc = new Console_Controller();
-        private static Room_Controller _rc = new Room_Controller();
-        private static Enemy_Controller _ec = new Enemy_Controller();
-        private static Action_Controller _ac = new Action_Controller();
+        private static Player player = (Player)new Player().Normal();
+        private static Console_Controller _cc = new Console_Controller(player);
+        private static Room_Controller _rc = new Room_Controller(player);
+        private static Enemy_Controller _ec = new Enemy_Controller(player);
+        private static Action_Controller _ac = new Action_Controller(player);
 
         static void Main(string[] args)
         {
@@ -25,8 +25,6 @@ namespace ConsoleAdventure
             Global_Values.seed = 1;
             // _cc.generate_Room_View();
             _cc.generate_Enemy_View();
-            Player player = (Player) new Player().Normal();
-            player.get_Ascii();
 #else
 #endif
             Global_Values.rng = Global_Values.seed == 0 ? new() : new(Global_Values.seed);

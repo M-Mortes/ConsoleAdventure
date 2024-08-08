@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleAdventure.Entitys;
 /*
     * alt  26 → →
     * alt 176 → ░
@@ -60,7 +61,7 @@ namespace ConsoleAdventure.Controller
 
             _rooms.FindAll(room => room.open_doors > 0);
 
-            File_Controller _cf = new File_Controller();
+            File_Controller _cf = new File_Controller(_player);
             _cf.write_Map(_rooms, $"{level}");
         }
 
