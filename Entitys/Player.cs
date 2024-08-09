@@ -9,7 +9,9 @@ namespace ConsoleAdventure.Entitys
 {
     internal class Player : Human
     {
-        public int level = 1;
+        public int room_id { get; set; }
+        public int level { get; set; }
+        public Room room { get; set; }
         float str_level_boni = 0f;
         float str_gear_boni = 0f;
         float perc_level_boni = 0f;

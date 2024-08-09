@@ -14,71 +14,33 @@ namespace ConsoleAdventure.Controller
     internal class Console_Controller
     {
         private static Player _player;
-        private int _hight = 29;
-        private int _width = 120;
-        private static int _frame_1_hight = 18;
-        private static int _frame_1_width = 78;
-        private static int _frame_2_hight = 18;
-        private static int _frame_2_width = 39;
-        private static int _frame_3_hight = 8;
-        private static int _frame_3_width = 118;
+        private static int _hight = Global_Values.console_hight;
+        private static int _width = Global_Values.console_width;
+        private static int _frame_1_hight = Global_Values.frame_1_hight;
+        private static int _frame_1_width = Global_Values.frame_1_width;
+        private static int _frame_2_hight = Global_Values.frame_2_hight;
+        private static int _frame_2_width = Global_Values.frame_2_width;
+        private static int _frame_3_hight = Global_Values.frame_3_hight;
+        private static int _frame_3_width = Global_Values.frame_3_width;
+
         private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) _ccf;
 
-        private Room_Controller _rc = new Room_Controller(_player);
+        private Room_Controller _rc;
 
-        public Console_Controller(Player player)
+        public Console_Controller(Player player, Room_Controller rc)
         {
             _player = player;
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
             Console.Title = "Console Adventure";
             _ccf = Clear_Console_Frame();
-
-
-            // Console.CursorVisible = false;
-        }
-
-        public void generate_Enemy_View()
-        {
-            Enemy enemy = new Enemy();
-
-            Global_Values.frame_1_text = _ccf._console_frame_1;
-            Global_Values.frame_2_text = _ccf._console_frame_2;
-            Global_Values.frame_3_text = _ccf._console_frame_3;
-
-            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, String_List_Combine(_player.get_Ascii(), Reverse_Char(enemy.ascii), _frame_1_width));
-            Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text, generate_Status_Table(enemy.get_stats()));
-            Update_Console();
-        }
-
-        public void generate_Room_View()
-        {
-            _rc.generate_Map(Global_Values.level);
-
-            Global_Values.frame_1_text = _ccf._console_frame_1;
-            Global_Values.frame_2_text = _ccf._console_frame_2;
-            Global_Values.frame_3_text = _ccf._console_frame_3;
-
-            Global_Values.frame_1_text = Add_To_Frame(Global_Values.frame_1_text, _rc.get_Current_Room(Global_Values.rng.Next(_rc._rooms.Count) + 1));
-            Update_Console();
-        }
-
-        public void generate_View()
-        {
-            if (Global_Values.rng.Next(2) == 1)
-            {
-                generate_Enemy_View();
-            }
-            else
-            {
-                generate_Room_View();
-            }
+            _rc = rc;
         }
 
         // #####################################
         // #####################################
         // Emptys the view
-        private (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) Clear_Console_Frame()
+        public (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) Clear_Console_Frame()
         {
             List<string> _console_frame_1 = new();
             List<string> _console_frame_2 = new();
@@ -104,36 +66,17 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // writes the view with spacers
-        private void Update_Console()
+        public void Update_Console()
         {
-            string _full = new('#', _width);
+            _update_Actions();
+            List<string> actions = Global_Values.actions;
+            actions.Add("(q) Quit");
 
-            List<string> temp = [
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11",
-                "12",
-                "13",
-                "14",
-                "15",
-                "16",
-                "17",
-                "18",
-                "19",
-                "20"
-                ];
+            string _full = new('#', _width);
 
             Global_Values.frame_1_text = String_Replace(Global_Values.frame_1_text);
             Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text);
-            Global_Values.frame_3_text = String_Replace(Global_Values.frame_3_text);
+            Global_Values.frame_3_text = String_Replace(Global_Values.frame_3_text, actions);
 
             Console.WriteLine(_full);
             for (int i = 0; i < Global_Values.frame_1_text.Count(); i++)
@@ -145,13 +88,13 @@ namespace ConsoleAdventure.Controller
             {
                 Console.WriteLine("#" + str + "#");
             }
-            Console.WriteLine(_full);
+            Console.Write(_full);
         }
 
         // #####################################
         // #####################################
         // replacing the stringplaceholders
-        private List<string> String_Replace(List<string> _string_list, List<string>? text = null)
+        public List<string> String_Replace(List<string> _string_list, List<string>? text = null)
         {
             if (text != null)
             {
@@ -207,7 +150,7 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // combines 2 string lists, centers them
-        private List<string> String_List_Combine(List<string> _left, List<string> _right, int _width = 0)
+        public List<string> String_List_Combine(List<string> _left, List<string> _right, int _width = 0)
         {
             List<string> _list = new List<string>();
             List<string> _list_left = new List<string>();
@@ -250,7 +193,7 @@ namespace ConsoleAdventure.Controller
         // #####################################
         // #####################################
         // Adds the Ascii List to the show list
-        private List<string> Add_To_Frame(List<string> string_list, List<string> to_add)
+        public List<string> Add_To_Frame(List<string> string_list, List<string> to_add)
         {
             int index = 0;
             int index_count = 0;
@@ -280,7 +223,7 @@ namespace ConsoleAdventure.Controller
         // ############################
         // ############################
         // Mirror the given ascii List
-        private List<string> Reverse_Char(IEnumerable<string> figure)
+        public List<string> Reverse_Char(IEnumerable<string> figure)
         {
             List<string> new_string = new List<string>();
             foreach (string str in figure)
@@ -294,7 +237,7 @@ namespace ConsoleAdventure.Controller
             return new_string;
         }
 
-        private List<string> generate_Status_Table(List<string> enemy_stat)
+        public List<string> generate_Status_Table(List<string> enemy_stat)
         {
             List<string> player_stat = _player.get_stats();
             List<string> stat_table = new();
@@ -316,6 +259,54 @@ namespace ConsoleAdventure.Controller
             }
             return stat_table;
         }
-    }
 
+        private void _update_Actions()
+        {
+            int gamestate = Global_Values.gamestate;
+            List<string> actions = new();
+            // idle
+            if (gamestate == 0)
+            {
+            }
+            // exploration
+            else if (gamestate == 1)
+            {
+                Room room = _rc.get_Current_Room(_player.room_id);
+                var rooms = _rc.get_Neighbors(room);
+                List<Room> neighbors = [rooms.north, rooms.south, rooms.west, rooms.east];
+                bool north_visit = false;
+                bool south_visit = false;
+                bool west_visit = false;
+                bool east_visit = false;
+                foreach (Room _room in neighbors)
+                {
+                    if (_room == null)
+                        continue;
+                    if (room.x + 1 == _room.x && _room.visited)
+                        east_visit = true;
+                    if (room.x - 1 == _room.x && _room.visited)
+                        west_visit = true;
+                    if (room.y + 1 == _room.y && _room.visited)
+                        north_visit = true;
+                    if (room.y - 1 == _room.y && _room.visited)
+                        south_visit = true;
+                }
+                if (!room.north_block)
+                    actions.Add("(w) Go north" + (north_visit ? " (visited)" : ""));
+                if (!room.south_block)
+                    actions.Add("(s) Go south" + (south_visit ? " (visited)" : ""));
+                if (!room.west_block)
+                    actions.Add("(a) Go west" + (west_visit ? " (visited)" : ""));
+                if (!room.east_block)
+                    actions.Add("(d) Go east" + (east_visit ? " (visited)" : ""));
+                actions.Add("...");
+            }
+            // ..
+            else if (gamestate == 2)
+            {
+
+            }
+            Global_Values.actions = actions;
+        }
+    }
 }

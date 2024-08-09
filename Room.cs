@@ -17,7 +17,7 @@ namespace ConsoleAdventure
         private bool _west_path = false;
         private bool _east_path = false;
 
-        private int _new_doors = 0;
+        public int _new_doors = 0;
 
         public bool north_block = false;
         public bool south_block = false;
@@ -25,10 +25,13 @@ namespace ConsoleAdventure
         public bool east_block = false;
 
         public int open_doors = 0;
+        public Room? room_north;
+        public Room? room_south;
+        public Room? room_west;
+        public Room? room_east;
 
         public int id { get; private set; }
         public bool visited { get; private set; }
-        public int ident { get; private set; }
         public int x { get; private set; }
         public int y { get; private set; }
 
@@ -63,9 +66,9 @@ namespace ConsoleAdventure
             return _room_Ascii;
         }
 
-        public void is_visited(bool is_visitied)
+        public void set_Visited()
         {
-            visited = is_visitied;
+            visited = true;
         }
 
         private void Room_Construct()
@@ -109,20 +112,6 @@ namespace ConsoleAdventure
 
             _room_Ascii = Generate_Room(_north_block, _east_block, _south_block, _west_block);
 
-            //    0 → deadend
-            //    1 → west
-            //   10 → north
-            //  100 → east
-            // 1000 → south
-            ident = 0;
-            if (!_west_block && !_west_path)
-                ident += 1;
-            if (!_north_block && !_north_path)
-                ident += 10;
-            if (!_east_block && !_east_path)
-                ident += 100;
-            if (!_south_block && !_south_path)
-                ident += 1000;
             north_block = _north_block;
             south_block = _south_block;
             west_block = _west_block;
@@ -142,7 +131,7 @@ namespace ConsoleAdventure
             bool _south_block = !_south_path;
             bool _west_block = !_west_path;
             bool _east_block = !_east_path;
-            List<int> chances = new() { 1, 59, 25, 15 };
+            List<int> chances = new() { 7, 17, 46, 30 };
 
             if (amount < 0)
                 return (_north_block, _south_block, _west_block, _east_block);
@@ -155,17 +144,18 @@ namespace ConsoleAdventure
                 int path_3_chance = chances[3];
 
                 int chance = Global_Values.rng.Next(100);
-                if (chance >= 0 && chance < deadend_chance)
+                if (chance < deadend_chance)
                     amount = 0;
-                else if (chance >= deadend_chance && chance < deadend_chance + path_1_chance)
+                else if (chance < deadend_chance + path_1_chance)
                     amount = 1;
-                else if (chance >= path_1_chance && chance < path_2_chance + path_1_chance + deadend_chance)
+                else if (chance < path_2_chance + path_1_chance + deadend_chance)
                     amount = 2;
-                else if (chance >= path_2_chance && chance < path_3_chance + path_2_chance + path_1_chance + deadend_chance)
+                else if (chance < path_3_chance + path_2_chance + path_1_chance + deadend_chance)
                     amount = 3;
             }
 
             open_doors = amount;
+            _new_doors = amount;
 
             if (amount == 3)
             {

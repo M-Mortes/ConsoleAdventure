@@ -48,9 +48,9 @@ namespace ConsoleAdventure.Controller
             _player = player;
         }
 
-        public List<string> get_Current_Room(int id)
+        public Room? get_Current_Room(int id)
         {
-            return _rooms.Find(room => room.id == id).get_Room_Ascii();
+            return _rooms.Find(room => room.id == id);
         }
 
         public void generate_Map(int level)
@@ -63,6 +63,30 @@ namespace ConsoleAdventure.Controller
 
             File_Controller _cf = new File_Controller(_player);
             _cf.write_Map(_rooms, $"{level}");
+
+            foreach (Room room in _rooms)
+            {
+                var neighbors = get_Neighbors(room);
+                room.room_north = neighbors.north;
+                room.room_south = neighbors.south;
+                room.room_east = neighbors.east;
+                room.room_west = neighbors.west;
+            }
+        }
+
+        public (Room? north, Room? south, Room? west, Room? east) get_Neighbors(Room room)
+        {
+            Room? north;
+            Room? south;
+            Room? west;
+            Room? east;
+            int x = room.x;
+            int y = room.y;
+            north = _rooms.Find(room => room.x == x && room.y == y + 1);
+            south = _rooms.Find(room => room.x == x && room.y == y - 1);
+            west = _rooms.Find(room => room.x == x - 1 && room.y == y);
+            east = _rooms.Find(room => room.x == x + 1 && room.y == y);
+            return (north, south, west, east);
         }
 
         private void _generate_Room(Room room)
@@ -78,57 +102,53 @@ namespace ConsoleAdventure.Controller
             _rooms.Add(room);
             _room_id++;
 
-            int ident = room.ident;
             int x = 0;
             int y = 0;
 
-            if (ident >= 1000)
+            if (!room.south_block)
             {
-                ident -= 1000;
                 x = room.x;
                 y = room.y - 1;
                 if (_rooms.Find(room => room.x == x && room.y == y) == null)
                 {
                     room.open_doors--;
-                    get_blocked(x, y);
+                    _generate_New_Room(x, y);
                 }
             }
-            if (ident >= 100)
+            if (!room.east_block)
             {
-                ident -= 100;
                 x = room.x + 1;
                 y = room.y;
                 if (_rooms.Find(room => room.x == x && room.y == y) == null)
                 {
                     room.open_doors--;
-                    get_blocked(x, y);
+                    _generate_New_Room(x, y);
                 }
             }
-            if (ident >= 10)
+            if (!room.north_block)
             {
-                ident -= 10;
                 x = room.x;
                 y = room.y + 1;
                 if (_rooms.Find(room => room.x == x && room.y == y) == null)
                 {
                     room.open_doors--;
-                    get_blocked(x, y);
+                    _generate_New_Room(x, y);
                 }
             }
-            if (ident >= 1)
+            if (!room.west_block)
             {
-                ident -= 1;
                 x = room.x - 1;
                 y = room.y;
                 if (_rooms.Find(room => room.x == x && room.y == y) == null)
                 {
                     room.open_doors--;
-                    get_blocked(x, y);
+                    _generate_New_Room(x, y);
                 }
             }
         }
 
-        private void get_blocked(int x, int y)
+
+        private void _generate_New_Room(int x, int y)
         {
             bool block_north = false;
             bool block_west = false;
