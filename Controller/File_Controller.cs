@@ -12,10 +12,14 @@ namespace ConsoleAdventure.Controller
     internal class File_Controller
     {
         private Player _player;
-        public File_Controller(Player player)
+        private Room_Controller _rc;
+
+        public File_Controller(Player player, Room_Controller rc)
         {
             _player = player;
+            _rc = rc;
         }
+
         private void Write_File(List<string> text, string file_name)
         {
             string file = file_name + ".txt";
@@ -51,35 +55,95 @@ namespace ConsoleAdventure.Controller
             return lines;
         }
 
-        public List<List<string>> Get_Map_List()
+        public void save(bool player = false, bool map = false)
         {
-            List<string> map_file = Read_File("map");
-            List<List<string>> map = new();
-            for (int i = 0; i < map_file.Count; i += 4)
+            if (player)
             {
-                List<string> map_part =
-                [
-                    Get_Map_Part(map_file, i),
-                    Get_Map_Part(map_file, i + 1),
-                    Get_Map_Part(map_file, i + 2),
-                    Get_Map_Part(map_file, i + 3),
-                ];
-                map.Add(map_part);
+                List<string> construct = new();
+                construct.Add($"{_player.level}");
+                construct.Add($"{_player.room_id}");
+                construct.Add($"{_player.class_name}");
+                construct.Add($"{_player.perc_multi}");
+                construct.Add($"{_player.dex_multi}");
+                construct.Add($"{_player.char_multi}");
+                construct.Add($"{_player.int_multi}");
+                construct.Add($"{_player.agi_multi}");
+                construct.Add($"{_player.lck_multi}");
+                Write_File(construct, "player");
             }
-            return map;
+            else if (map)
+            {
+                List<Room> rooms = _rc._rooms;
+                List<string> construct = new();
+                foreach (Room room in rooms)
+                {
+                    construct.Add($"{room.id}");
+                    construct.Add($"{room.x}");
+                    construct.Add($"{room.y}");
+                    construct.Add($"{room._new_doors}");
+                    construct.Add($"{room.north_block}");
+                    construct.Add($"{room.south_block}");
+                    construct.Add($"{room.west_block}");
+                    construct.Add($"{room.east_block}");
+                    construct.Add($"{!room.north_block}");
+                    construct.Add($"{!room.south_block}");
+                    construct.Add($"{!room.west_block}");
+                    construct.Add($"{!room.east_block}");
+                    construct.Add($"{room.visited}");
+                    construct.Add("##+##");
+                }
+                Write_File(construct, "rooms");
+            }
         }
-        private string Get_Map_Part(List<string> map_file, int index)
+
+        public void load(bool player = false, bool map = false)
         {
-            int counter = 1;
-            string map_part = "";
-            foreach (char item in map_file[index])
+            if (player)
             {
-                if (counter % 4 == 0)
-                    break;
-                map_part += item;
-                counter++;
+                List<string> construct = Read_File("player");
+
+                _player.level = Int32.Parse(construct[0]);
+                _player.room_id = Int32.Parse(construct[1]);
+                _player.room = _rc._rooms.Find(room => room.id == Int32.Parse(construct[1]));
+                _player.class_name = construct[2];
+                _player.perc_multi = float.Parse(construct[3]);
+                _player.dex_multi = float.Parse(construct[4]);
+                _player.char_multi = float.Parse(construct[5]);
+                _player.int_multi = float.Parse(construct[6]);
+                _player.agi_multi = float.Parse(construct[7]);
+                _player.lck_multi = float.Parse(construct[8]);
+
             }
-            return map_part;
+            else if (map)
+            {
+                List<string> construct = Read_File("rooms");
+                List<string> room_const = new();
+                List<Room> rooms = new();
+                foreach (string line in construct)
+                {
+                    room_const.Add(line);
+                    if (line.Equals("##+##"))
+                    {
+                        rooms.Add(new Room(
+                            Int32.Parse(room_const[0]),
+                            Int32.Parse(room_const[1]),
+                            Int32.Parse(room_const[2]),
+                            Int32.Parse(room_const[3]),
+                            bool.Parse(room_const[4]),
+                            bool.Parse(room_const[5]),
+                            bool.Parse(room_const[6]),
+                            bool.Parse(room_const[7]),
+                            bool.Parse(room_const[8]),
+                            bool.Parse(room_const[9]),
+                            bool.Parse(room_const[10]),
+                            bool.Parse(room_const[11]),
+                            bool.Parse(room_const[12])));
+                        room_const = new();
+                    }
+                }
+                _rc._rooms = rooms;
+                _rc.set_Neighbors();
+            }
         }
 
         public void write_Map(List<Room> rooms, string level)

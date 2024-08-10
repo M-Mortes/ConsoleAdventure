@@ -39,10 +39,10 @@ namespace ConsoleAdventure
 
         public Room(int id, int x = 0, int y = 0, int doors = 0,
             bool north_block = false, bool south_block = false, bool west_block = false, bool east_block = false,
-            bool north_path = false, bool south_path = false, bool west_path = false, bool east_path = false)
+            bool north_path = false, bool south_path = false, bool west_path = false, bool east_path = false, bool visited = false)
         {
             this.id = id;
-            visited = false;
+            this.visited = visited;
             _new_doors = doors;
 
             this.north_block = north_block;

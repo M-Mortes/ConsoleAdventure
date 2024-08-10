@@ -70,6 +70,7 @@ namespace ConsoleAdventure.Controller
         {
             _update_Actions();
             List<string> actions = Global_Values.actions;
+            actions.Add("(l) Load");
             actions.Add("(q) Quit");
 
             string _full = new('#', _width);

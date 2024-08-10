@@ -15,14 +15,16 @@ namespace ConsoleAdventure.Controller
         private Player _player;
         private Room_Controller _rc;
         private Console_Controller _cc;
+        private File_Controller _fc;
 
         private static (List<string> _console_frame_1, List<string> _console_frame_2, List<string> _console_frame_3) _ccf;
 
-        public Action_Controller(Player player, Room_Controller rc, Console_Controller cc)
+        public Action_Controller(Player player, Room_Controller rc, Console_Controller cc, File_Controller fc)
         {
             _player = player;
             _rc = rc;
             _cc = cc;
+            _fc = fc;
             _ccf = _cc.Clear_Console_Frame();
         }
         public void next_Action()
@@ -30,21 +32,31 @@ namespace ConsoleAdventure.Controller
             Console.Write("\n\rWhat to do.. ?: ");
             ConsoleKeyInfo key = Console.ReadKey();
             int gamestate = Global_Values.gamestate;
-            List<char> room_controle = new();
+            List<char> room_cont = ['l', 'q'];
             if (!_player.room.south_block)
-                room_controle.Add('s');
+                room_cont.Add('s');
             if (!_player.room.north_block)
-                room_controle.Add('w');
+                room_cont.Add('w');
             if (!_player.room.west_block)
-                room_controle.Add('a');
+                room_cont.Add('a');
             if (!_player.room.east_block)
-                room_controle.Add('d');
+                room_cont.Add('d');
 
             if (key.KeyChar.Equals('q'))
             {
                 Console.WriteLine("\n\rAre you sure that you want to exit? y/n");
                 if (Console.ReadKey().KeyChar.Equals('y'))
-                    Environment.Exit(0);
+                {
+                    Console.WriteLine("\n\rDo you want to save? y/n");
+                    if (Console.ReadKey().KeyChar.Equals('y'))
+                    {
+                        _fc.save(map: true);
+                        _fc.save(player: true);
+                        Environment.Exit(0);
+                    }
+                    else
+                        Environment.Exit(0);
+                }
                 else
                 {
                     Console.Write("");
@@ -60,7 +72,7 @@ namespace ConsoleAdventure.Controller
 
                     break;
                 case 1:
-                    if (room_controle.Contains(key.KeyChar))
+                    if (room_cont.Contains(key.KeyChar))
                     {
                         Global_Values.action_Ident = key.KeyChar;
                     }
@@ -72,8 +84,6 @@ namespace ConsoleAdventure.Controller
                     }
                     break;
             }
-
-
         }
 
         public void next_Reaction()
@@ -101,14 +111,19 @@ namespace ConsoleAdventure.Controller
                         case 'd':
                             new_Room_Enter(_rc._rooms.Find(room => room.x == _player.room.x + 1 && room.y == _player.room.y));
                             break;
+                        case 'l':
+                            _fc.load(map: true);
+                            _fc.load(player: true);
+                            _fc.write_Map(_rc._rooms, $"{Global_Values.level}");
+                            Console.WriteLine("Loading complete!");
+                            generate_Room_View();
+                            break;
                     }
                     break;
             }
         }
         public void new_Room_Enter(Room new_Room)
         {
-
-
             _player.room = new_Room;
             _player.room_id = new_Room.id;
             new_Room.set_Visited();

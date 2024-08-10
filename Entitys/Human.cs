@@ -36,6 +36,7 @@ namespace ConsoleAdventure.Entitys
      */
     internal class Human
     {
+        public string class_name {  get; set; }
         public float str_multi = 0f;
         public float perc_multi = 0f;
         public float dex_multi = 0f;
@@ -48,6 +49,7 @@ namespace ConsoleAdventure.Entitys
 
         public Human Normal()
         {
+            class_name = "Normal";
             str_multi = 1.0f;
             perc_multi = 1.0f;
             dex_multi = 1.0f;
@@ -61,6 +63,7 @@ namespace ConsoleAdventure.Entitys
         }
         public Human Mage()
         {
+            class_name = "Mage";
             str_multi = 0.7f;
             perc_multi = 0.9f;
             dex_multi = 0.8f;
@@ -74,6 +77,7 @@ namespace ConsoleAdventure.Entitys
         }
         public Human Warriro()
         {
+            class_name = "Warriror";
             str_multi = 1.5f;
             perc_multi = 0.7f;
             dex_multi = 1.4f;

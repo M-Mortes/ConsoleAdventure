@@ -58,12 +58,11 @@ namespace ConsoleAdventure.Controller
             _room_id = 1;
             Global_Values.room_count = 6 + level + Global_Values.rng.Next(0, level);
             _generate_Room(new Room(_room_id, doors: Global_Values.room_count));
+            set_Neighbors();
+        }
 
-            _rooms.FindAll(room => room.open_doors > 0);
-
-            File_Controller _cf = new File_Controller(_player);
-            _cf.write_Map(_rooms, $"{level}");
-
+        public void set_Neighbors()
+        {
             foreach (Room room in _rooms)
             {
                 var neighbors = get_Neighbors(room);

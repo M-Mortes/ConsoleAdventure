@@ -6,6 +6,7 @@ using System.Collections;
 using System;
 using ConsoleAdventure.Entitys;
 using ConsoleAdventure.Controller;
+using System.Reflection.Emit;
 
 /* TODO:
  * Aktionen ~
@@ -27,15 +28,23 @@ namespace ConsoleAdventure
 {
     class Main_Game_Loop
     {
-        private static Player player = (Player)new Player().Normal();
-        private static Room_Controller _rc = new Room_Controller(player);
-        private static Console_Controller _cc = new Console_Controller(player, _rc);
-        private static Enemy_Controller _ec = new Enemy_Controller(player);
-        private static Action_Controller _ac = new Action_Controller(player, _rc, _cc);
+        private static Player _player;
+        private static Enemy_Controller _ec;
+        private static File_Controller _fc;
+        private static Room_Controller _rc;
+        private static Console_Controller _cc;
+        private static Action_Controller _ac;
 
         static void Main(string[] args)
         {
-            player.level = 1;
+            _player = (Player)new Player().Normal();
+            _ec = new Enemy_Controller(_player);
+            _rc = new Room_Controller(_player);
+            _fc = new File_Controller(_player, _rc);
+            _cc = new Console_Controller(_player, _rc);
+            _ac = new Action_Controller(_player, _rc, _cc, _fc);
+
+            _player.level = 1;
             Global_Values.action_Ident = 'x';
             Global_Values.gamestate = 1;
             Global_Values.level = 1;
@@ -46,6 +55,7 @@ namespace ConsoleAdventure
 
             Global_Values.rng = Global_Values.seed == 0 ? new() : new(Global_Values.seed);
             _rc.generate_Map(Global_Values.level);
+            _fc.write_Map(_rc._rooms, $"{Global_Values.level}");
             _ac.new_Room_Enter(_rc._rooms[Global_Values.rng.Next(_rc._rooms.Count)]);
 
             //debug
