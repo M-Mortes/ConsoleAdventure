@@ -11,7 +11,7 @@ using System.Reflection.Emit;
 /* TODO:
  * Aktionen ~
  * Erkunden ☺
- * Speichern
+ * Speichern ☺
  * Kampf
  * Ausrüstung
  * Inventar
