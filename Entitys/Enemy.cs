@@ -7,7 +7,7 @@ using System.Threading.Tasks.Sources;
 
 namespace ConsoleAdventure.Entitys
 {
-    internal class Enemy
+    internal class Enemy : Human
     {
         int _level = 0;
         Human.Type _id;

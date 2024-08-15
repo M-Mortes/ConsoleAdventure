@@ -32,7 +32,7 @@ namespace ConsoleAdventure.Controller
             Console.Write("\n\rWhat to do.. ?: ");
             ConsoleKeyInfo key = Console.ReadKey();
             int gamestate = Global_Values.gamestate;
-            List<char> room_cont = ['l', 'q'];
+            List<char> room_cont = ['l', 'q', '/'];
             if (!_player.room.south_block)
                 room_cont.Add('s');
             if (!_player.room.north_block)
@@ -41,6 +41,17 @@ namespace ConsoleAdventure.Controller
                 room_cont.Add('a');
             if (!_player.room.east_block)
                 room_cont.Add('d');
+
+            if (key.KeyChar.Equals('/'))
+                if (Console.ReadKey().KeyChar.Equals('/'))
+                    if (Console.ReadKey().KeyChar.Equals('d'))
+                        if (Console.ReadKey().KeyChar.Equals('e'))
+                            if (Console.ReadKey().KeyChar.Equals('b'))
+                                if (Console.ReadKey().KeyChar.Equals('u'))
+                                    if (Console.ReadKey().KeyChar.Equals('g'))
+                                    {
+                                        debug();
+                                    }
 
             if (key.KeyChar.Equals('q'))
             {
@@ -83,6 +94,33 @@ namespace ConsoleAdventure.Controller
                         return;
                     }
                     break;
+            }
+        }
+
+        private void debug()
+        {
+            int gamestate = Global_Values.gamestate;
+            Global_Values.gamestate = 0;
+            var consoles = _cc.Clear_Console_Frame();
+            Global_Values.frame_3_text = consoles._console_frame_3;
+            Console.WriteLine();
+            _cc.Update_Console();
+            Console.Write("Debug: ");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.KeyChar.Equals('m'))
+            {
+                Console.Write("\n\rMap Level: ");
+                string? line = Console.ReadLine();
+                int num = 0;
+                if(int.TryParse(line, out num))
+                {
+                    Global_Values.level = num;
+                    _rc.generate_Map();
+                    _fc.write_Map(_rc._rooms, $"{Global_Values.level}");
+                    new_Room_Enter(_rc._rooms[Global_Values.rng.Next(_rc._rooms.Count)]);
+                    generate_Room_View();
+                    Global_Values.gamestate = gamestate;
+                }
             }
         }
 

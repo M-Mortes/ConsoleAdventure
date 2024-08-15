@@ -54,13 +54,9 @@ namespace ConsoleAdventure
             //end
 
             Global_Values.rng = Global_Values.seed == 0 ? new() : new(Global_Values.seed);
-            _rc.generate_Map(Global_Values.level);
-            _fc.write_Map(_rc._rooms, $"{Global_Values.level}");
-            _ac.new_Room_Enter(_rc._rooms[Global_Values.rng.Next(_rc._rooms.Count)]);
-
+            new_Map();
             //debug
             // _cc.generate_View();
-            _ac.generate_Room_View();
             // _cc.generate_Enemy_View();
             //end
 
@@ -70,6 +66,13 @@ namespace ConsoleAdventure
                 _ac.next_Action();
                 _ac.next_Reaction();
             }
+        }
+        public static void new_Map()
+        {
+            _rc.generate_Map();
+            _fc.write_Map(_rc._rooms, $"{Global_Values.level}");
+            _ac.new_Room_Enter(_rc._rooms[Global_Values.rng.Next(_rc._rooms.Count)]);
+            _ac.generate_Room_View();
         }
     }
 }

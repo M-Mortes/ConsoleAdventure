@@ -53,8 +53,9 @@ namespace ConsoleAdventure.Controller
             return _rooms.Find(room => room.id == id);
         }
 
-        public void generate_Map(int level)
+        public void generate_Map()
         {
+            int level = Global_Values.level;
             _room_id = 1;
             Global_Values.room_count = 6 + level + Global_Values.rng.Next(0, level);
             _generate_Room(new Room(_room_id, doors: Global_Values.room_count));

@@ -37,7 +37,7 @@ namespace ConsoleAdventure.Entitys
      */
     internal class Human
     {
-        public string class_name { get; private set; }
+        public string class_name { get; set; }
         public int level { get; set; }
         public enum Type { Normal, Mage, Warrior }
         public Type type { get; private set; }
@@ -52,13 +52,13 @@ namespace ConsoleAdventure.Entitys
         public float stat_lck { get; set; }
 
         // stat multi
-        public float str_multi { get; private set; }
-        public float perc_multi { get; private set; }
-        public float dex_multi { get; private set; }
-        public float char_multi { get; private set; }
-        public float int_multi { get; private set; }
-        public float agi_multi { get; private set; }
-        public float lck_multi { get; private set; }
+        public float str_multi { get; set; }
+        public float perc_multi { get; set; }
+        public float dex_multi { get; set; }
+        public float char_multi { get; set; }
+        public float int_multi { get; set; }
+        public float agi_multi { get; set; }
+        public float lck_multi { get; set; }
 
         // battle stats
         public float health { get; set; }

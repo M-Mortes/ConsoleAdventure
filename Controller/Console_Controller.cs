@@ -69,15 +69,12 @@ namespace ConsoleAdventure.Controller
         public void Update_Console()
         {
             _update_Actions();
-            List<string> actions = Global_Values.actions;
-            actions.Add("(l) Load");
-            actions.Add("(q) Quit");
 
             string _full = new('#', _width);
 
             Global_Values.frame_1_text = String_Replace(Global_Values.frame_1_text);
             Global_Values.frame_2_text = String_Replace(Global_Values.frame_2_text);
-            Global_Values.frame_3_text = String_Replace(Global_Values.frame_3_text, actions);
+            Global_Values.frame_3_text = String_Replace(Global_Values.frame_3_text, Global_Values.actions);
 
             Console.WriteLine(_full);
             for (int i = 0; i < Global_Values.frame_1_text.Count(); i++)
@@ -265,9 +262,10 @@ namespace ConsoleAdventure.Controller
         {
             int gamestate = Global_Values.gamestate;
             List<string> actions = new();
-            // idle
+            // debug
             if (gamestate == 0)
             {
+                actions.Add("(m) Set Map Level");
             }
             // exploration
             else if (gamestate == 1)
@@ -306,6 +304,12 @@ namespace ConsoleAdventure.Controller
             else if (gamestate == 2)
             {
 
+            }
+
+            if (gamestate != 0)
+            {
+                actions.Add("(l) Load");
+                actions.Add("(q) Quit");
             }
             Global_Values.actions = actions;
         }
