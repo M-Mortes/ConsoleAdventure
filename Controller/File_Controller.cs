@@ -98,7 +98,7 @@ namespace ConsoleAdventure.Controller
 
         public void load(bool player = false, bool map = false)
         {
-            if (player)
+            if (player && File.Exists("player.txt"))
             {
                 List<string> construct = Read_File("player");
 
@@ -114,7 +114,7 @@ namespace ConsoleAdventure.Controller
                 _player.lck_multi = float.Parse(construct[8]);
 
             }
-            else if (map)
+            else if (map && File.Exists("rooms.txt"))
             {
                 List<string> construct = Read_File("rooms");
                 List<string> room_const = new();
